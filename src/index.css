@@ -1,0 +1,15 @@
+:root {
+	/* fonts */
+	--raleway-font: 'Raleway', sans-serif;
+
+	/* colors */
+	--dark-grey: #1D1F22;
+	--light-green: #5ECE7B;
+	--white: #FFF;
+}
+
+*, *::before, *::after {
+    margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}

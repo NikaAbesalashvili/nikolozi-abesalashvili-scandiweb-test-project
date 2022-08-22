@@ -1,0 +1,22 @@
+.products-section {
+	margin: 2rem 0;
+	display: flex;
+	gap: 2.5rem;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.category-name {
+	padding-left: 5rem;
+	font-family: var(--raleway-font);
+	font-size: 3em;
+	font-weight: 400;
+	color: var(--dark-grey);
+}
+
+.products-box {
+    display: flex;
+	gap: 2rem;
+	justify-content: center;
+	flex-wrap: wrap;
+}

@@ -1,0 +1,29 @@
+.product-image {
+    margin-bottom: 1.3rem;
+    aspect-ratio: 1 / 1;
+    width: 500px;
+}
+
+.product-name {
+    font-family: var(--raleway-font);
+    font-size: 1.125em;
+    font-weight: 300;
+    color: var(--dark-grey);
+}
+
+.add-to-cart-button {
+    aspect-ratio: 1 / 1;
+    padding: .7rem;
+    font-size: 3.25em;
+    color: var(--white);
+    background-color: var(--light-green);
+    cursor: pointer;
+    border: 0;
+    border-radius: 10rem;
+}
+
+.currency-price {
+    font-family: var(--raleway-font);
+    font-size: 1.125em;
+    font-weight: 500;
+}
