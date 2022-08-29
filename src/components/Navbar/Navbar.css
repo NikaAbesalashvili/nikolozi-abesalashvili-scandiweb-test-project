@@ -1,0 +1,19 @@
+nav {
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-and-currencies {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.cart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 2em;
+}
