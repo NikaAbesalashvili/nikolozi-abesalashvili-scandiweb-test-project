@@ -13,14 +13,29 @@ export default class Products extends Component {
                     </h1>
                     <div className="products-box">
                         {this.props.products.map((product) => (
-                            <ProductCard
-                                productName={product.name}
-                                productImage={product.gallery[0]}
-                                outOfStock={product.inStock}
-                                currencySymbol={product.prices[this.props.activeCurrency].currency.symbol}
-                                price={product.prices[this.props.activeCurrency].amount}
-                                key={product.id}
-                            />
+                            this.props.categoryName !== 'all' ? (
+                                this.props.categoryName === product.category && (
+
+                                    <ProductCard
+                                        productName={product.name}
+                                        productImage={product.gallery[0]}
+                                        outOfStock={product.inStock}
+                                        currencySymbol={product.prices[this.props.activeCurrency].currency.symbol}
+                                        price={product.prices[this.props.activeCurrency].amount}
+                                        key={product.id}
+
+                                    />
+                                )
+                            ) : (
+                                <ProductCard
+                                    productName={product.name}
+                                    productImage={product.gallery[0]}
+                                    outOfStock={product.inStock}
+                                    currencySymbol={product.prices[this.props.activeCurrency].currency.symbol}
+                                    price={product.prices[this.props.activeCurrency].amount}
+                                    key={product.id}
+                                />
+                            )
                         ))}
                     </div>
                 </section>

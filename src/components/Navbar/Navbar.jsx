@@ -18,7 +18,7 @@ export default class Navbar extends Component {
                     {this.props.categories && (
                         <ul className="categories">
                             {this.props.categories.map((category, index) => (
-                                <li key={index} >
+                                <li key={index} onClick={() => this.props.handleCategoryChange(category.name)} >
                                     {category.name}
                                 </li>
                             ))}

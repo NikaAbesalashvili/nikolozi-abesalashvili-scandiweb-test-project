@@ -74,17 +74,22 @@ export default class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			categoryName: '',
 			products: [],
 			currencySymbol: '',
 			activeCurrency: 0,
+			selectedCategory: 'all'
 		}
 
 		this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+		this.handleCategoryChange = this.handleCategoryChange.bind(this);
 	};
 
 	handleCurrencyChange(newCurrency) {
 		this.setState({ activeCurrency: newCurrency });
+	};
+
+	handleCategoryChange(newCategory) {
+		this.setState({ selectedCategory: newCategory });
 	};
 
 	componentDidMount() {
@@ -137,6 +142,7 @@ export default class App extends Component {
 						activeCurrency={currencies[this.state.activeCurrency].symbol}
 						currencies={currencies}
 						handleCurrencyChange={this.handleCurrencyChange}
+						handleCategoryChange={this.handleCategoryChange}
 						categories={cateogries}
 					/>
 					<Routes>
@@ -145,7 +151,7 @@ export default class App extends Component {
 							element={
 								<Products
 									products={this.state.products}
-									categoryName={this.state.categoryName}
+									categoryName={this.state.selectedCategory}
 									activeCurrency={this.state.activeCurrency}
 								/>
 							}
