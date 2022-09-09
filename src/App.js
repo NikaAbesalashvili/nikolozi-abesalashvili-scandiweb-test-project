@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
 import { Products } from './pages';
@@ -68,6 +68,8 @@ const cateogries = [
 	  "name": "tech"
 	}
   ]
+
+export const CartContext = React.createContext(); 
 
 export default class App extends Component {
 
@@ -145,6 +147,7 @@ export default class App extends Component {
 						handleCategoryChange={this.handleCategoryChange}
 						categories={cateogries}
 					/>
+
 					<Routes>
 						<Route 
 							path='/'

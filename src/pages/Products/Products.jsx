@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { ProductCard } from '../../components';
+
 import './Products.css';
 
 export default class Products extends Component {
