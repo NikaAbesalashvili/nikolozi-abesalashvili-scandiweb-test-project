@@ -4,7 +4,6 @@
 
 .selected-currency {
     font-size: 1.125em;
-    font-family: var(--raleway-font);
     font-weight: 500;
 }
 
@@ -18,11 +17,11 @@
 
 .container {
     position: absolute;
+    filter: drop-shadow(0px 4px 35px rgba(168, 172, 176, 0.19));
 }
 
 .currencies {
     position: relative;
-    bottom: -5%;
     right: 10%;
 }
 

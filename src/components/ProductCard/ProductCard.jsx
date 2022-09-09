@@ -22,16 +22,30 @@ export default class ProductCard extends Component {
                 onMouseEnter={() => this.setState({ mouseHovered: true })}
                 onMouseLeave={() => this.setState({ mouseHovered: false })}
             >
-                <img className='product-image' src={this.props.productImage} alt={this.props.productName} />
+                <div className="image-section">
+
+                    <img
+                        className={`product-image ${this.props.outOfStock ? 'half-opacity' : ''}`}
+                        src={this.props.productImage}
+                        alt={this.props.productName}
+                    />
+
+                    {this.props.outOfStock ? (
+                        <h2 className="out-of-stock">
+                            OUT OF STOCK
+                        </h2>
+                    ) : this.state.mouseHovered && (
+                        <button 
+                            className='add-to-cart-button'
+                            onClick={this.handleAddToCart}
+                        >
+                            <BsCart2 />
+                        </button>
+                    )}
+
+                </div>
+                
                 <h2 className='product-name' >{this.props.productName}</h2>
-                {this.state.mouseHovered && (
-                    <button 
-                        className='add-to-cart-button'
-                        onClick={this.handleAddToCart}
-                    >
-                        <BsCart2 />
-                    </button>
-                )}
                 <h3 className='currency-price' >
                     {this.props.currencySymbol}{this.props.price}
                 </h3>

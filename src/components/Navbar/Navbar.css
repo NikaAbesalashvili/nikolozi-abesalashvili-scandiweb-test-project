@@ -1,13 +1,37 @@
 nav {
-    padding: 1rem 3rem;
+    padding: 1rem 5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
+.categories {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+
+.categories > li {
+    padding: 1.5rem 1rem;
+    font-size: 1em;
+    font-weight: 400;
+    color: var(--dark-grey);
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.categories > li:hover {
+    color: var(--light-green);
+    border-bottom: 1px solid var(--light-green);
+}
+
+.logo {
+    margin-right: 3rem;
+}
+
 .cart-and-currencies {
     display: flex;
-    gap: 1rem;
+    gap: 3rem;
     align-items: center;
 }
 

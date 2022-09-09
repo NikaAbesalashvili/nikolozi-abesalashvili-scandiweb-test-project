@@ -15,7 +15,16 @@ export default class Navbar extends Component {
         return (
             <header>
                 <nav>
-                    <img src={logo} alt="logo" />
+                    {this.props.categories && (
+                        <ul className="categories">
+                            {this.props.categories.map((category, index) => (
+                                <li key={index} >
+                                    {category.name}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                    <img className='logo' src={logo} alt="logo" />
                     <div className='cart-and-currencies' >
                         
                         

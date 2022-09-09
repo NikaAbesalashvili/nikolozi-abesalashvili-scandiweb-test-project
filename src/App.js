@@ -1,8 +1,73 @@
 import { Component } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
-import { ProductCard } from './components';
+import { Products } from './pages';
+import { Navbar } from './components';
 
-import './App.css';
+const GET_CURRENCIES = gql`
+	query currencies {
+		currencies {
+			label
+			symbol
+		}
+	}
+`;
+
+const GET_PRODUCTS = gql`
+	query categories {
+		category {
+			name
+			products {
+				id
+				name
+				isStock
+				gallery
+				prices {
+					amount
+					currency {
+						label
+						symbol
+					}
+				}
+			}
+		}
+	}
+`
+
+const currencies = [
+	{
+	  "label": "USD",
+	  "symbol": "$"
+	},
+	{
+	  "label": "GBP",
+	  "symbol": "£"
+	},
+	{
+	  "label": "AUD",
+	  "symbol": "A$"
+	},
+	{
+	  "label": "JPY",
+	  "symbol": "¥"
+	},
+	{
+	  "label": "RUB",
+	  "symbol": "₽"
+	}
+  ]
+
+const cateogries = [
+	{
+	  "name": "all"
+	},
+	{
+	  "name": "clothes"
+	},
+	{
+	  "name": "tech"
+	}
+  ]
 
 export default class App extends Component {
 
@@ -11,7 +76,15 @@ export default class App extends Component {
 		this.state = {
 			categoryName: '',
 			products: [],
+			currencySymbol: '',
+			activeCurrency: 0,
 		}
+
+		this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+	};
+
+	handleCurrencyChange(newCurrency) {
+		this.setState({ activeCurrency: newCurrency });
 	};
 
 	componentDidMount() {
@@ -51,33 +124,35 @@ export default class App extends Component {
 				console.log(result);
 				this.setState({
 					categoryName: result?.data.category.name,
-					products: result?.data.category.products
-				})
+					products: result?.data.category.products,
+				});
 			});
 	};
 
 	render() {
 		return (
-			this.state.products.length > 1 && (
-
-				<section className='products-section' >
-					<h1 className='category-name' >{this.state.categoryName}</h1>
-					<div className='products-box'>
-
-						{this.state.products.map((product) => (
-							<ProductCard
-								productName={product.name}
-								productImage={product.gallery[0]}
-								currencySymbol={product.prices[0].currency.symbol}
-								price={product.prices[0].amount}
-								key={product.id}
-							/>
-						))}
-
-					</div>
-				</section>
-
-			)
+			<>
+				<BrowserRouter>
+					<Navbar
+						activeCurrency={currencies[this.state.activeCurrency].symbol}
+						currencies={currencies}
+						handleCurrencyChange={this.handleCurrencyChange}
+						categories={cateogries}
+					/>
+					<Routes>
+						<Route 
+							path='/'
+							element={
+								<Products
+									products={this.state.products}
+									categoryName={this.state.categoryName}
+									activeCurrency={this.state.activeCurrency}
+								/>
+							}
+						/>
+					</Routes>
+				</BrowserRouter>
+			</>
 		);
 	};
 };
