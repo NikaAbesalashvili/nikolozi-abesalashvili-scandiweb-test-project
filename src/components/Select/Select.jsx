@@ -30,7 +30,7 @@ export default class Select extends Component {
 
                 <div className='main-area' >
                     <span className='selected-currency' >
-                        {this.props.selectedCurrency}
+                        {this.props.currencies[this.props.selectedCurrency]?.symbol}
                     </span>
                     <button
                         className='dropdown-button'

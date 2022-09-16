@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { ProductsContext } from '../../context';
 import Select from '../Select/Select';
 import { BsCart2 } from 'react-icons/bs';
 
@@ -12,13 +13,22 @@ export default class Navbar extends Component {
     };
     
     render() {
+
+        const {
+            categories,
+            currencies,
+            activeCurrency,
+            handleCategoryChange,
+            handleCurrencyChange,
+        } = this.context;
+
         return (
             <header>
                 <nav>
-                    {this.props.categories && (
+                    {categories && (
                         <ul className="categories">
-                            {this.props.categories.map((category, index) => (
-                                <li key={index} onClick={() => this.props.handleCategoryChange(category.name)} >
+                            {categories.map((category, index) => (
+                                <li key={index} onClick={() => handleCategoryChange(category.name)} >
                                     {category.name}
                                 </li>
                             ))}
@@ -26,12 +36,11 @@ export default class Navbar extends Component {
                     )}
                     <img className='logo' src={logo} alt="logo" />
                     <div className='cart-and-currencies' >
-                        
-                        
+                            
                         <Select
-                            selectedCurrency={this.props.activeCurrency}
-                            currencies={this.props.currencies}
-                            handleCurrencyChange={this.props.handleCurrencyChange}
+                            selectedCurrency={activeCurrency}
+                            currencies={currencies}
+                            handleCurrencyChange={handleCurrencyChange}
                         />
 
                         <button
@@ -47,3 +56,5 @@ export default class Navbar extends Component {
         );
     };
 };
+
+Navbar.contextType = ProductsContext;
