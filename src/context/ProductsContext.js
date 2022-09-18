@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ProductsService } from '../services';
 
 export const ProductsContext = React.createContext();
+export const ProductsConsumer = ProductsContext.Consumer;
 
 export class ProductsProvider extends Component {
     constructor(props) {

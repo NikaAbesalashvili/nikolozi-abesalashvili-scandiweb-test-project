@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { ProductsContext } from '../../context';
+import { ProductsConsumer, CartConsumer } from '../../context';
 import Select from '../Select/Select';
 import { BsCart2 } from 'react-icons/bs';
 
@@ -7,9 +7,17 @@ import logo from '../../assets/a-logo.png';
 import './Navbar.css';
 
 export default class Navbar extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            miniCartOpened: false,
+        };
+
+        this.handleCartOpen = this.handleCartOpen.bind(this);
+    };
 
     handleCartOpen() {
-        console.log('CART OPEN');
+        this.setState({ miniCartOpened: !this.state.miniCartOpened });
     };
     
     render() {
@@ -23,38 +31,66 @@ export default class Navbar extends Component {
         } = this.context;
 
         return (
-            <header>
-                <nav>
-                    {categories && (
-                        <ul className="categories">
-                            {categories.map((category, index) => (
-                                <li key={index} onClick={() => handleCategoryChange(category.name)} >
-                                    {category.name}
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                    <img className='logo' src={logo} alt="logo" />
-                    <div className='cart-and-currencies' >
-                            
-                        <Select
-                            selectedCurrency={activeCurrency}
-                            currencies={currencies}
-                            handleCurrencyChange={handleCurrencyChange}
-                        />
+            <ProductsConsumer>
+                {(productsProps) => {
 
-                        <button
-                            className='cart-button'
-                            onClick={this.handleCartOpen}
-                        >
-                                <BsCart2/>
-                        </button>
+                    const {
+                        categories,
+                        currencies,
+                        activeCurrency,
+                        handleCategoryChange,
+                        handleCurrencyChange,
+                    } = productsProps;
 
-                    </div>
-                </nav>
-            </header>
+                    return (
+                        <CartConsumer>
+                            {(cartProps) => {
+
+                                return (
+
+                                    <header>
+                                        <nav>
+                                            {categories && (
+                                                <ul className="categories">
+                                                    {categories.map((category, index) => (
+                                                        <li key={index} onClick={() => handleCategoryChange(category.name)} >
+                                                            {category.name}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            )}
+                                            <img className='logo' src={logo} alt="logo" />
+                                            <div className='cart-and-currencies' >
+                                                    
+                                                <Select
+                                                    selectedCurrency={activeCurrency}
+                                                    currencies={currencies}
+                                                    handleCurrencyChange={handleCurrencyChange}
+                                                />
+                                                <div className="mini-cart">
+
+                                                    <button
+                                                        className='cart-button'
+                                                        onClick={this.handleCartOpen}
+                                                    >
+                                                            <BsCart2/>
+                                                    </button>
+                                                    
+                                                    <div className="mini-cart-box">
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </nav>
+                                    </header>
+                                );
+                            }}
+                        </CartConsumer>
+                    );
+                }}
+            </ProductsConsumer>
         );
     };
 };
-
-Navbar.contextType = ProductsContext;

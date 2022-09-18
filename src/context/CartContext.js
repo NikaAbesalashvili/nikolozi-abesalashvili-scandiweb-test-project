@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ProductsContext } from './ProductsContext';
 
 export const CartContext = React.createContext();
+export const CartConsumer = CartContext.Consumer;
 
 const LOCAL_STORAGE_PREFIX = 'SCANDIWEB-E-COMMERCE';
 
@@ -107,7 +108,7 @@ export class CartProvider extends Component {
             this.setState({ quantity });
             this.setState({ totalPrice });
             this.setState({ taxPrice: totalPrice * 21 / 100 });
-        }
+        };
     };
 
     componentDidMount() {
@@ -127,13 +128,12 @@ export class CartProvider extends Component {
             increaseProductAmount,
         } = this;
 
-        const { currencySymbol, activeCurrency } = this.context;
+        const { currencySymbol } = this.context;
         
         return (
             <CartContext.Provider
                 value={{
                     currencySymbol,
-                    activeCurrency,
                     productsInCart,
                     taxPrice,
                     quantity,
@@ -149,4 +149,4 @@ export class CartProvider extends Component {
     };
 };
 
-CartProvider.contextType = ProductsContext;
+CartProvider.contextType = ProductsContext
