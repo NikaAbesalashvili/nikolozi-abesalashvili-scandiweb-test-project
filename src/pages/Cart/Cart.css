@@ -1,0 +1,49 @@
+.cart-section {
+    padding: 2rem 6rem;
+    display: flex;
+    gap: 5rem;
+    flex-direction: column;
+}
+
+.cart-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--dark-grey);
+}
+
+.products {
+    display: flex;
+    gap: 3rem;
+    flex-direction: column;
+}
+
+.cart-info {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.tax,
+.quantity {
+    font-size: 1.5em;
+    font-weight: 400;
+}
+
+.total {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.cart-span {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.order-button {
+    border: 0;
+    padding: 1rem 5rem;
+    background-color: var(--light-green);
+    font-size: .875em;
+    font-weight: 600;
+    color: var(--white);
+}

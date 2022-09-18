@@ -25,9 +25,7 @@ export default class Products extends Component {
                                 selectedCategory === product.category && (
 
                                     <ProductCard
-                                        productName={product.name}
-                                        productImage={product.gallery[0]}
-                                        outOfStock={product.inStock}
+                                        product={product}
                                         currencySymbol={product.prices[activeCurrency].currency.symbol}
                                         price={product.prices[activeCurrency].amount}
                                         key={product.id}
@@ -36,9 +34,7 @@ export default class Products extends Component {
                                 )
                             ) : (
                                 <ProductCard
-                                    productName={product.name}
-                                    productImage={product.gallery[0]}
-                                    outOfStock={product.inStock}
+                                    product={product}
                                     currencySymbol={product.prices[activeCurrency].currency.symbol}
                                     price={product.prices[activeCurrency].amount}
                                     key={product.id}

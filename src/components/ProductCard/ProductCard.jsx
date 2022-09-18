@@ -1,5 +1,7 @@
 import { Component } from 'react';
+import { CartContext } from '../../context';
 import { BsCart2 } from 'react-icons/bs';
+
 import './ProductsCard.css';
 
 export default class ProductCard extends Component {
@@ -11,11 +13,13 @@ export default class ProductCard extends Component {
         };
     };
 
-    handleAddToCart() {
-        console.log('PRODUCT ADDED TO CART!!!');
-    };
-
     render() {
+
+        const { inStock, gallery, name, brand } = this.props.product;
+        const {
+            handleAddProductToCart,
+        } = this.context;
+
         return (
             <div
                 className='product-card'
@@ -25,19 +29,19 @@ export default class ProductCard extends Component {
                 <div className="image-section">
 
                     <img
-                        className={`product-image ${this.props.outOfStock ? 'half-opacity' : ''}`}
-                        src={this.props.productImage}
-                        alt={this.props.productName}
+                        className={`product-image ${inStock ? 'half-opacity' : ''}`}
+                        src={gallery[0]}
+                        alt={name}
                     />
 
-                    {this.props.outOfStock ? (
+                    {inStock ? (
                         <h2 className="out-of-stock">
                             OUT OF STOCK
                         </h2>
                     ) : this.state.mouseHovered && (
                         <button 
                             className='add-to-cart-button'
-                            onClick={this.handleAddToCart}
+                            onClick={() => handleAddProductToCart(this.props.product)}
                         >
                             <BsCart2 />
                         </button>
@@ -45,7 +49,7 @@ export default class ProductCard extends Component {
 
                 </div>
                 
-                <h2 className='product-name' >{this.props.productName}</h2>
+                <h2 className='product-name'>{brand} {name}</h2>
                 <h3 className='currency-price' >
                     {this.props.currencySymbol}{this.props.price}
                 </h3>
@@ -53,3 +57,5 @@ export default class ProductCard extends Component {
         );
     };
 };
+
+ProductCard.contextType = CartContext;

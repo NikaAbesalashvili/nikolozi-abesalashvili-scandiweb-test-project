@@ -1,33 +1,15 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Products } from './pages';
 import { Navbar } from './components';
+import { Products, Cart } from './pages';
 
 export const CartContext = React.createContext(); 
 
 export default class App extends Component {
 
-	constructor() {
-		super();
-		this.state = {
-			products: [],
-			currencySymbol: '',
-			activeCurrency: 0,
-			selectedCategory: 'all'
-		}
-
-		this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
-		this.handleCategoryChange = this.handleCategoryChange.bind(this);
+	constructor(props) {
+		super(props);
 	};
-
-	handleCurrencyChange(newCurrency) {
-		this.setState({ activeCurrency: newCurrency });
-	};
-
-	handleCategoryChange(newCategory) {
-		this.setState({ selectedCategory: newCategory });
-	};
-
 
 	render() {
 		return (
@@ -37,6 +19,7 @@ export default class App extends Component {
 
 					<Routes>
 						<Route path='/' element={<Products/>} />
+						<Route path='/cart' element={<Cart />} />
 					</Routes>
 				</BrowserRouter>
 			</>

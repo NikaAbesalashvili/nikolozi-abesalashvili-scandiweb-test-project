@@ -3,10 +3,11 @@
 	--raleway-font: 'Raleway', sans-serif;
 
 	/* colors */
+	--white: #FFF;
 	--dark-grey: #1D1F22;
 	--light-green: #5ECE7B;
-	--white: #FFF;
 	--lightest-grey: #EEEEEE;
+	--border-gray: #E5E5E5;
 	--semi-gray: #8D8F9A;
 }
 
