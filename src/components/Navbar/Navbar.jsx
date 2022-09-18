@@ -1,6 +1,8 @@
 import { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { ProductsConsumer, CartConsumer } from '../../context';
 import Select from '../Select/Select';
+import CartProduct from '../CartProduct/CartProduct';
 import { BsCart2 } from 'react-icons/bs';
 
 import logo from '../../assets/a-logo.png';
@@ -22,14 +24,6 @@ export default class Navbar extends Component {
     
     render() {
 
-        const {
-            categories,
-            currencies,
-            activeCurrency,
-            handleCategoryChange,
-            handleCurrencyChange,
-        } = this.context;
-
         return (
             <ProductsConsumer>
                 {(productsProps) => {
@@ -45,6 +39,8 @@ export default class Navbar extends Component {
                     return (
                         <CartConsumer>
                             {(cartProps) => {
+
+                                const { productsInCart } = cartProps;
 
                                 return (
 
@@ -76,9 +72,30 @@ export default class Navbar extends Component {
                                                             <BsCart2/>
                                                     </button>
                                                     
-                                                    <div className="mini-cart-box">
+                                                    {this.state.miniCartOpened && (
+                                                        <div className="mini-cart-box">
+                                                            <div className="mini-cart-products">
+                                                            
+                                                                {productsInCart.map((productInCart) => (
+                                                                    <CartProduct
+                                                                        variant='small'
+                                                                        product={productInCart}
+                                                                        key={productInCart.id}
+                                                                    />
+                                                                ))}
 
-                                                    </div>
+                                                                <div className="cart-buttons">
+                                                                    <Link to='/cart' className='to-cart-link'>
+                                                                        VIEW BAG
+                                                                    </Link>
+                                                                    
+                                                                    <button className='check-out-button' >CHECK OUT</button>
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                 </div>
 

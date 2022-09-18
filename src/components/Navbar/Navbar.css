@@ -41,3 +41,70 @@ nav {
     cursor: pointer;
     font-size: 2em;
 }
+
+.mini-cart-box {
+    overflow: hidden;
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    top: 10%;
+    right: 0;
+    z-index: 2;
+    background-color: var(--transparent-cart-color);
+}
+
+.mini-cart-products {
+    padding: 1rem;
+    width: fit-content;
+    position: fixed;
+    right: 3%;
+    background-color: var(--white);
+    height: 45%;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+.mini-cart-products::-webkit-scrollbar {
+    width: 1rem;
+}
+
+.mini-cart-products::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.mini-cart-products::-webkit-scrollbar-thumb {
+    background-color: var(--light-green);
+    border-radius: 3rem;
+    outline: 1px solid slategrey;
+}
+
+.cart-buttons {
+    margin: 3rem 0;
+    width: 100%;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.to-cart-link,
+.check-out-button {
+    padding: 1rem 3rem;
+    font-size: .875em;
+    font-weight: 600;
+}
+
+.to-cart-link {
+    border: 1px solid var(--dark-grey);
+    text-decoration: none;
+    color: var(--dark-grey);
+}
+
+.check-out-button {
+    border: none;
+    background-color: var(--light-green);
+    color: var(--white);
+}
+

@@ -40,7 +40,7 @@ export default class Cart extends Component {
                                 <div className="products">
                                     {productsInCart.map((product) => (
                                         product.amount > 0 && (
-                                            <CartProduct product={product} key={product.id} />
+                                            <CartProduct noBorders={false} product={product} key={product.id} />
                                         )
                                     ))}
                                 </div>

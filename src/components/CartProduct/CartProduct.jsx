@@ -41,7 +41,7 @@ export default class CartProduct extends Component {
                                 } = cartProps;
 
                                 return (
-                                    <div className="cart-product">
+                                    <div className={`cart-product ${this.props.variant ? 'small' : ''}`}>
 
                                     <div className="left-side">
                                         <h2 className="brand-name">{brand}</h2>

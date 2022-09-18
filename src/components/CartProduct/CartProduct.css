@@ -92,3 +92,8 @@
     font-weight: 500;
     color: var(--dark-grey);
 }
+
+.small {
+    border: 0;
+}
+

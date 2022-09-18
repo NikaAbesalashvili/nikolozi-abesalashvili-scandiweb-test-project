@@ -3,6 +3,7 @@
 	--raleway-font: 'Raleway', sans-serif;
 
 	/* colors */
+	--transparent-cart-color: rgba(57, 55, 72, 0.22);
 	--white: #FFF;
 	--dark-grey: #1D1F22;
 	--light-green: #5ECE7B;
