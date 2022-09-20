@@ -66,11 +66,6 @@
     color: var(--dark-grey);
 }
 
-.not-color-item:hover {
-    background-color: var(--dark-grey);
-    color: var(--white);
-}
-
 .right-side {
     display: flex;
     gap: 1.5rem;
