@@ -60,7 +60,7 @@ export default class CartProduct extends Component {
                                                                 <span
                                                                     className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'}`}
                                                                     key={item.id}
-                                                                    style={{ backgroundColor: attribute.id !== 'Color' ? '#FFF': item.value}}
+                                                                    style={{ backgroundColor: attribute.id !== 'Color' ? '': item.value}}
                                                                 >
                                                                     {attribute.id !== 'Color' && item.value}
                                                                 </span>
