@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navbar } from './components';
-import { Products, Cart } from './pages';
+import { Products, Cart, Product } from './pages';
 
 export const CartContext = React.createContext(); 
 
@@ -20,6 +20,7 @@ export default class App extends Component {
 					<Routes>
 						<Route path='/' element={<Products/>} />
 						<Route path='/cart' element={<Cart />} />
+						<Route path='/products/:id' element={<Product />} />
 					</Routes>
 				</BrowserRouter>
 			</>

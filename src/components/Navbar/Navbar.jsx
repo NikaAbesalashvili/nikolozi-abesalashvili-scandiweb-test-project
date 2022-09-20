@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+
 import { ProductsConsumer, CartConsumer } from '../../context';
 import Select from '../Select/Select';
 import CartProduct from '../CartProduct/CartProduct';
@@ -55,7 +56,13 @@ export default class Navbar extends Component {
                                                     ))}
                                                 </ul>
                                             )}
-                                            <img className='logo' src={logo} alt="logo" />
+
+                                            <img
+                                                className='logo'
+                                                src={logo}
+                                                alt="Logo"
+                                            />
+
                                             <div className='cart-and-currencies' >
                                                     
                                                 <Select

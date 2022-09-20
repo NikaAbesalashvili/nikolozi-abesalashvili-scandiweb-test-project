@@ -3,6 +3,7 @@ import { CartContext } from '../../context';
 import { BsCart2 } from 'react-icons/bs';
 
 import './ProductsCard.css';
+import { Navigate } from 'react-router-dom';
 
 export default class ProductCard extends Component {
 
@@ -10,12 +11,19 @@ export default class ProductCard extends Component {
         super();
         this.state = {
             mouseHovered: false,
+            productClicked: false,
         };
+
+        this.handleProductOpen = this.handleProductOpen.bind(this)
+    };
+
+    handleProductOpen() {
+        this.setState({ productClicked: !this.state.productClicked })
     };
 
     render() {
 
-        const { inStock, gallery, name, brand } = this.props.product;
+        const { id, inStock, gallery, name, brand } = this.props.product;
         const {
             handleAddProductToCart,
         } = this.context;
@@ -23,18 +31,21 @@ export default class ProductCard extends Component {
         return (
             <div
                 className='product-card'
+                onClick={this.handleProductOpen}
                 onMouseEnter={() => this.setState({ mouseHovered: true })}
                 onMouseLeave={() => this.setState({ mouseHovered: false })}
             >
+                {this.state.productClicked && <Navigate to={`/products/${id}`} />}
                 <div className="image-section">
 
                     <img
-                        className={`product-image ${inStock ? 'half-opacity' : ''}`}
+                        className={`product-image ${!inStock ? 'half-opacity' : ''}`}
                         src={gallery[0]}
                         alt={name}
                     />
 
-                    {inStock ? (
+
+                    {!inStock ? (
                         <h2 className="out-of-stock">
                             OUT OF STOCK
                         </h2>
