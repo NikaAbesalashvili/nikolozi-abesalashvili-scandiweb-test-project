@@ -10,14 +10,32 @@
     width: 48%;
     display: flex;
     gap: 2rem;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .product-images {
-    width: 15%;
+    padding: 0 .5rem;
+    width: 18%;
+    height: 350px;
     display: flex;
     gap: 1rem;
     flex-direction: column;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.product-images::-webkit-scrollbar {
+    width: .5rem;
+}
+
+.product-images::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.product-images::-webkit-scrollbar-thumb {
+    background-color: var(--light-green);
+    border-radius: 3rem;
+    outline: 1px solid slategrey;
 }
 
 .mini-image {
