@@ -12,6 +12,7 @@
 	font-size: 3em;
 	font-weight: 400;
 	color: var(--dark-grey);
+	text-transform: capitalize;
 }
 
 .products-box {
