@@ -5,10 +5,6 @@ import './CartProduct.css';
 
 export default class CartProduct extends Component {
 
-    constructor(props) {
-        super(props);
-    };
-
     render() {
 
         const {

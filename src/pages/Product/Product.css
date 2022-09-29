@@ -25,7 +25,7 @@
 }
 
 .product-images::-webkit-scrollbar {
-    width: .5rem;
+    width: .3rem;
 }
 
 .product-images::-webkit-scrollbar-track {
