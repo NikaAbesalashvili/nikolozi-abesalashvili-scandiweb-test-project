@@ -62,15 +62,15 @@ export default class Product extends Component {
                                                         {this.state.product.gallery.map((productImage, index) => (
                                                             <img
                                                                 className="mini-image"
+                                                                alt=""
                                                                 src={productImage}
-                                                                alt="Mini Image"
                                                                 key={index}
                                                                 onClick={() => this.changeImage(index)}
                                                             />
                                                         ))}
                                                     </div>
                         
-                                                    <img className="main-image" src={this.state.product.gallery[this.state.activeImage]} alt="Product Image" />
+                                                    <img className="main-image" src={this.state.product.gallery[this.state.activeImage]} alt="" />
                                                 </div>
                         
                                             )}
@@ -118,7 +118,7 @@ export default class Product extends Component {
                                                 {this.state.product.inStock && (
                                                     <button 
                                                         className="add-to-cart"
-                                                        onClick={() => handleAddProductToCart(this.state.product)}
+                                                        onClick={(event) => handleAddProductToCart(event, this.state.product)}
                                                     >
                                                         ADD TO CART
                                                     </button>

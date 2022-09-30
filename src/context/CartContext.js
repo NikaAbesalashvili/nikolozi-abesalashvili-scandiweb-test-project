@@ -23,7 +23,8 @@ export class CartProvider extends Component {
         this.increaseProductAmount = this.increaseProductAmount.bind(this);
     };
 
-    handleAddProductToCart(product) {
+    handleAddProductToCart(event, product) {
+        event?.stopPropagation();
         const { id, brand, name, gallery, prices, attributes } = product;
         const cartProduct = {
             id,
