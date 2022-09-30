@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { LOCAL_STORAGE_PREFIX } from '../constants';
 import { ProductsService } from '../services';
 
 export const ProductsContext = React.createContext();
@@ -40,6 +41,7 @@ export class ProductsProvider extends Component {
 			});
 		
 		const { currencies } = apiCurrencies;
+		
 		this.setState({ currencies });
 	};
 
@@ -54,16 +56,66 @@ export class ProductsProvider extends Component {
 
 	handleCategoryChange(newCategory) {
         this.setState({ selectedCategory: newCategory });
+
+		const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
+
+		if(localStorageData) {
+			const parsedLocalStorageData = JSON.parse(localStorageData);
+
+			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
+				...parsedLocalStorageData,
+				selectedCategory: newCategory,
+			}));
+		};
     };
 
     handleCurrencyChange(newCurrency) {
-		this.setState({ activeCurrency: newCurrency, currencySymbol: this.state.currencies[newCurrency].symbol });
+		this.setState({
+			activeCurrency: newCurrency,
+			currencySymbol: this.state.currencies[newCurrency].symbol
+		});
+
+		const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
+		
+		if(localStorageData) {
+			const parsedLocalStorageData = JSON.parse(localStorageData);
+			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
+				...parsedLocalStorageData,
+				activeCurrency: newCurrency,
+				currencySymbol: this.state.currencies[newCurrency].symbol,
+			}));
+		};
 	};
 
     componentDidMount() {
 		this.fetchCategories();
 		this.fetchCurrencies();
 		this.fetchProducts();
+
+		let localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
+
+		if(localStorageData) {
+			let {
+				activeCurrency,
+				currencySymbol,
+				selectedCategory,
+			} = JSON.parse(localStorageData);
+
+			this.setState({
+				activeCurrency,
+				currencySymbol,
+				selectedCategory,
+			});
+			
+		} else {
+			let dataToSave = {
+				activeCurrency: this.state.activeCurrency,
+				currencySymbol: this.state.currencySymbol,
+				selectedCategory: this.state.selectedCategory,
+			};
+
+			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify(dataToSave));
+		}
 	};
 
     render() {

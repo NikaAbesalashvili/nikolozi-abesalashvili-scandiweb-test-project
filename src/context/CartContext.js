@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import { LOCAL_STORAGE_PREFIX } from '../constants';
 import { ProductsContext } from './ProductsContext';
 
 export const CartContext = React.createContext();
 export const CartConsumer = CartContext.Consumer;
-
-const LOCAL_STORAGE_PREFIX = 'SCANDIWEB-E-COMMERCE';
 
 export class CartProvider extends Component {
 
@@ -94,8 +93,9 @@ export class CartProvider extends Component {
 
     updateCartState() {
         const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
-        if(localStorageData) {
-            this.setState({ productsInCart: JSON.parse(localStorageData) });
+
+        if(localStorageData && localStorageData.cartProducts) {
+            this.setState({ productsInCart: localStorageData.cartProducts });
 
             const { activeCurrency } = this.context;
             let quantity = 0;
