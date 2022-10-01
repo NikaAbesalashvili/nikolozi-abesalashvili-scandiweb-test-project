@@ -65,6 +65,7 @@ export class CartProvider extends Component {
 
     decreaseProductAmount(productId) {
         let newProducts = this.state.productsInCart;
+        const quantity = this.state.quantity;
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
         
         const productPrice = newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
@@ -75,7 +76,13 @@ export class CartProvider extends Component {
             newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].amount -= 1;
         }
 
-        this.setState({ productsInCart: newProducts });
+        this.setState({
+            productsInCart: newProducts,
+            taxPrice: (localStorageData.totalAmount - productPrice) * 21 / 100,
+            totalPrice: localStorageData.totalAmount - productPrice,
+            quantity: quantity - 1,
+        });
+
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
             totalAmount: localStorageData.totalAmount - productPrice,
@@ -85,13 +92,20 @@ export class CartProvider extends Component {
 
     increaseProductAmount(productId) {
         const newProducts = this.state.productsInCart;
+        const quantity = this.state.quantity;
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
         
         const productPrice =  newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
 
         newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].amount += 1;
         
-        this.setState({ productsInCart: newProducts });
+        this.setState({
+            productsInCart: newProducts,
+            taxPrice: (localStorageData.totalAmount + productPrice) * 21 / 100,
+            totalPrice: localStorageData.totalAmount + productPrice,
+            quantity: quantity + 1,
+        });
+
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
             totalAmount: localStorageData.totalAmount + productPrice,
@@ -99,12 +113,35 @@ export class CartProvider extends Component {
         }));
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
+        if(localStorageData && JSON.parse(localStorageData).totalAmount) {
+            const parsedLocalStorageData = JSON.parse(localStorageData);
+
+            if(prevState.totalPrice !== parsedLocalStorageData.totalAmount) {
+                this.setState({
+                    taxPrice: parsedLocalStorageData.totalAmount * 21 / 100,
+                    totalPrice: parsedLocalStorageData.totalAmount,
+                });
+            };
+        };
+    };
 
     componentDidMount() {
         const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
         if(localStorageData) {
             const parsedLocalStorageData = JSON.parse(localStorageData);
-            this.setState({ productsInCart: parsedLocalStorageData.productsInCart })
+           
+            let quantity = parsedLocalStorageData.productsInCart.reduce((total, product) => {
+                return total + product.amount
+            }, 0);
+           
+            this.setState({
+                productsInCart: parsedLocalStorageData.productsInCart,
+                taxPrice: parsedLocalStorageData.totalAmount * 21 / 100,
+                quantity,
+                totalPrice: parsedLocalStorageData.totalAmount,
+            });
         }
     };
 

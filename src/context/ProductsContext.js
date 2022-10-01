@@ -86,10 +86,9 @@ export class ProductsProvider extends Component {
 			};
 			
 			if(parsedLocalStorageData.totalAmount) {
-				newLocalStorageData.totalAmount = parsedLocalStorageData.productsInCart.reduce((product) => {
-					const total = 0;
+				newLocalStorageData.totalAmount = parsedLocalStorageData.productsInCart.reduce((total, product) => {
 					return total + product.amount * product.prices[newCurrency].amount
-				});
+				}, 0);
 			}
 			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify(newLocalStorageData));
 		};
