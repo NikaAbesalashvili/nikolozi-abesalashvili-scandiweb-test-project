@@ -11,9 +11,11 @@ export default class Product extends Component {
         this.state = {
             product: {},
             activeImage: 0,
+            selectedAttributes: [],
         };
 
         this.fetchProduct = this.fetchProduct.bind(this);
+        this.handleAttributeSelect = this.handleAttributeSelect.bind(this);
         this.changeImage = this.changeImage.bind(this);
     };
 
@@ -24,11 +26,22 @@ export default class Product extends Component {
             });
         
         const { product } = apiResponse;
-        this.setState({ product });
+        this.setState({
+            product,
+            selectedAttributes: product.attributes.map((attribute) => ({ [attribute.id]: attribute.items[0].displayValue })),
+        });
     };
 
     changeImage(imageIndex) {
         this.setState({ activeImage: imageIndex });
+    };
+
+    handleAttributeSelect(attributeName, attributeValue, attributeIndex) {
+        let attributes = this.state.selectedAttributes;
+        attributes[attributeIndex][attributeName] = attributeValue;
+        this.setState({
+            selectedAttributes: {...attributes, [attributeName]: attributeValue }
+        });
     };
 
     componentDidMount() {
@@ -84,7 +97,7 @@ export default class Product extends Component {
                         
                                                 {this.state.product.attributes && (
                                                     <div className="attributes">
-                                                        {this.state.product.attributes.map((attribute) => (
+                                                        {this.state.product.attributes.map((attribute, index) => (
                                                             
                                                             <div className="attribute" key={attribute.id} >
                                                                 <h5 className="attribute-name">{attribute.id}:</h5>
@@ -92,9 +105,10 @@ export default class Product extends Component {
                                                                     
                                                                     {attribute.items.map((item) => (
                                                                         <span
-                                                                            className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'}`}
+                                                                            className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${this.state.selectedAttributes[index][attribute.id] === item.displayValue ? attribute.id !== 'Color' ? 'selected': 'selected-color' : ''}`}
                                                                             key={item.id}
-                                                                            style={{ backgroundColor: attribute.id !== 'Color' ? '#FFF': item.value}}
+                                                                            style={{ backgroundColor: attribute.id !== 'Color' ? 'auto': item.value}}
+                                                                            onClick={() => this.handleAttributeSelect(attribute.id, item.displayValue, index)}
                                                                         >
                                                                             {attribute.id !== 'Color' && item.value}
                                                                         </span>
@@ -118,7 +132,7 @@ export default class Product extends Component {
                                                 {this.state.product.inStock && (
                                                     <button 
                                                         className="add-to-cart"
-                                                        onClick={(event) => handleAddProductToCart(event, this.state.product)}
+                                                        onClick={(event) => handleAddProductToCart(event, this.state.product, this.state.selectedAttributes)}
                                                     >
                                                         ADD TO CART
                                                     </button>

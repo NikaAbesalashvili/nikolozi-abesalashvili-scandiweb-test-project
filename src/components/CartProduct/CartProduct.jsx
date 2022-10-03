@@ -11,10 +11,11 @@ export default class CartProduct extends Component {
             id,
             amount,
             attributes,
+            selectedAttributes,
             brand,
             gallery,
             name,
-            prices
+            prices,
         } = this.props.product;
 
         return (
@@ -32,6 +33,7 @@ export default class CartProduct extends Component {
                             {(cartProps) => {
 
                                 const {
+                                    handleAttributeChange,
                                     decreaseProductAmount,
                                     increaseProductAmount,
                                 } = cartProps;
@@ -47,18 +49,19 @@ export default class CartProduct extends Component {
                                         {attributes && (
                                             <div className="attributes">
                     
-                                                {attributes.map((attribute) => (
+                                                {attributes.map((attribute, index) => (
                                                     <div className="attribute" key={attribute.id} >
                                                         <h5 className="attribute-name">{attribute.id}:</h5>
                                                         <div className="attribute-items">
                                                             
                                                             {attribute.items.map((item) => (
                                                                 <span
-                                                                    className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'}`}
+                                                                    className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${selectedAttributes[index][attribute.id] === item.displayValue ? attribute.id !== 'Color' ? 'selected' : 'selected-color' : ''}`}
                                                                     key={item.id}
                                                                     style={{ backgroundColor: attribute.id !== 'Color' ? '': item.value}}
+                                                                    onClick={() => handleAttributeChange(id, index, attribute.id, item.displayValue)}
                                                                 >
-                                                                    {attribute.id !== 'Color' && item.value}
+                                                                    {attribute.id !== 'Color' && item.displayValue}
                                                                 </span>
                                                             ))}
                             

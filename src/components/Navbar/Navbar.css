@@ -12,6 +12,7 @@ nav {
 }
 
 .categories > li {
+    border-bottom: 1px solid var(--white);
     padding: 1.5rem 1rem;
     font-size: 1em;
     font-weight: 400;

@@ -17,11 +17,12 @@ export class CartProvider extends Component {
         };
 
         this.handleAddProductToCart = this.handleAddProductToCart.bind(this);
+        this.handleAttributeChange = this.handleAttributeChange.bind(this);
         this.decreaseProductAmount = this.decreaseProductAmount.bind(this);
         this.increaseProductAmount = this.increaseProductAmount.bind(this);
     };
 
-    handleAddProductToCart(event, product) {
+    handleAddProductToCart(event, product, selectedAttributes = null) {
         event.stopPropagation();
 
         const { id, brand, name, gallery, prices, attributes } = product;
@@ -35,7 +36,16 @@ export class CartProvider extends Component {
             amount: 1,
         };
 
-        if(this.state.productsInCart.length < 1) {
+        if(Object.keys(selectedAttributes || !selectedAttributes).length === 0) {
+            selectedAttributes = attributes.map((attribute) => {
+                return { [attribute.id]: attribute.items[0].displayValue }
+            });
+            cartProduct.selectedAttributes = selectedAttributes;
+        } else {
+            cartProduct.selectedAttributes = selectedAttributes;
+        }
+        
+        if(this.state.productsInCart?.length < 1 || !this.state.productsInCart) {
             this.setState({ productsInCart: [cartProduct] });
             
             const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
@@ -48,7 +58,7 @@ export class CartProvider extends Component {
                 productsInCart: [cartProduct],
             }));
         } else {
-            if(this.state.productsInCart.every((product) => product.id !== cartProduct.id)) {
+            if(this.state.productsInCart?.every((product) => product.id !== cartProduct.id)) {
                 const newProducts = [...this.state.productsInCart, cartProduct];
 
                 this.setState({ productsInCart: newProducts });
@@ -57,10 +67,23 @@ export class CartProvider extends Component {
                 localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
                     ...localStorageData,
                     totalAmount: localStorageData.totalAmount + cartProduct.prices[localStorageData.activeCurrency].amount,
-                    productsInCart: this.state.productsInCart,
+                    productsInCart: newProducts,
                 }));
             };
         };
+    };
+
+    handleAttributeChange(productId, attributeIndex, attributeName, attributeValue) {
+        let products = this.state.productsInCart;
+        products.find((product) => productId === product.id).selectedAttributes[attributeIndex][attributeName] = attributeValue;
+
+        this.setState({ productsInCart: products });
+
+        const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
+        localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
+            ...localStorageData,
+            productsInCart: products,
+        }));
     };
 
     decreaseProductAmount(productId) {
@@ -132,7 +155,7 @@ export class CartProvider extends Component {
         if(localStorageData) {
             const parsedLocalStorageData = JSON.parse(localStorageData);
            
-            let quantity = parsedLocalStorageData.productsInCart.reduce((total, product) => {
+            let quantity = parsedLocalStorageData.productsInCart?.reduce((total, product) => {
                 return total + product.amount
             }, 0);
            
@@ -154,6 +177,7 @@ export class CartProvider extends Component {
         } = this.state;
         const {
             handleAddProductToCart,
+            handleAttributeChange,
             decreaseProductAmount,
             increaseProductAmount,
         } = this;
@@ -169,6 +193,7 @@ export class CartProvider extends Component {
                     quantity,
                     totalPrice,
                     handleAddProductToCart,
+                    handleAttributeChange,
                     decreaseProductAmount,
                     increaseProductAmount,
                 }}

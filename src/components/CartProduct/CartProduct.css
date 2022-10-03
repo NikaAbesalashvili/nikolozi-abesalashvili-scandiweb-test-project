@@ -36,7 +36,6 @@
     display: flex;
     gap: .5rem;
     flex-direction: column;
-    
 }
 
 
@@ -53,6 +52,11 @@
     cursor: pointer;
 }
 
+.attribute-item:hover {
+    background-color: var(--dark-grey);
+    color: var(--white);
+}
+
 .color {
     aspect-ratio: 1 / 1;
     width: 1.5rem;
@@ -64,6 +68,15 @@
     font-size: 1rem;
     font-weight: 400;
     color: var(--dark-grey);
+}
+
+.selected {
+    background-color: var(--dark-grey);
+    color: var(--white);
+}
+
+.selected-color {
+    border: 1px solid var(--dark-grey);
 }
 
 .right-side {
