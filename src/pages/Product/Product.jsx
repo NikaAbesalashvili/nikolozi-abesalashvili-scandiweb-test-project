@@ -139,9 +139,8 @@ export default class Product extends Component {
                                                 )}
 
                                                 {this.state.product.description && (
-                                                    <p className="product-description">
-                                                        {this.state.product.description.replace(/(<([^>]+)>)/ig, '')}
-                                                    </p>
+                                                    <div className="product-description" dangerouslySetInnerHTML={{ __html: this.state.product.description }} />
+                                                    
                                                 )}
                                             
                                             </div>

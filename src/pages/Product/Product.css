@@ -107,12 +107,6 @@
     cursor: pointer;
 }
 
-.product-description {
-    font-size: 1em;
-    font-weight: 400;
-    color: var(--dark-grey);
-}
-
 .color {
     border: 1px solid var(--white);
 }
@@ -123,4 +117,10 @@
 
 .selected-color {
     border: 1px solid var(--dark-grey);
+}
+
+.product-description > ul > li {
+    font-size: 1em;
+    font-weight: 400;
+    color: var(--dark-grey);
 }
