@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { CartConsumer } from '../../context';
+import { ProductsConsumer, CartConsumer } from '../../context';
 import { BsCart2 } from 'react-icons/bs';
 
 import './ProductsCard.css';
@@ -23,53 +23,64 @@ export default class ProductCard extends Component {
 
     render() {
         return (
-            <CartConsumer>
-                {(cartProps) => {
-                    
-                    const { handleAddProductToCart } = cartProps;
-                    const { id, inStock, gallery, name, brand } = this.props.product;
 
+            <ProductsConsumer>
+                {(productsProps) => {
+                    
+                    const { selectedCategory } = productsProps;
 
                     return (
-                        <div
-                            className='product-card'
-                            onClick={this.handleProductOpen}
-                            onMouseEnter={() => this.setState({ mouseHovered: true })}
-                            onMouseLeave={() => this.setState({ mouseHovered: false })}
-                        >
-                            {this.state.productClicked && <Navigate to={`/products/${id}`} />}
-                            <div className="image-section">
-
-                                <img
-                                    className={`product-image ${!inStock ? 'half-opacity' : ''}`}
-                                    src={gallery[0]}
-                                    alt={name}
-                                />
+                        <CartConsumer>
+                            {(cartProps) => {
+                                
+                                const { handleAddProductToCart } = cartProps;
+                                const { id, inStock, gallery, name, brand } = this.props.product;
 
 
-                                {!inStock ? (
-                                    <h2 className="out-of-stock">
-                                        OUT OF STOCK
-                                    </h2>
-                                ) : this.state.mouseHovered && (
-                                    <button 
-                                        className='add-to-cart-button'
-                                        onClick={(event) => handleAddProductToCart(event, this.props.product)}
+                                return (
+                                    <div
+                                        className='product-card'
+                                        onClick={this.handleProductOpen}
+                                        onMouseEnter={() => this.setState({ mouseHovered: true })}
+                                        onMouseLeave={() => this.setState({ mouseHovered: false })}
                                     >
-                                        <BsCart2 />
-                                    </button>
-                                )}
+                                        {this.state.productClicked && <Navigate to={`/products/${selectedCategory}/${id}`} />}
+                                        <div className="image-section">
 
-                            </div>
-                            
-                            <h2 className='product-name'>{brand} {name}</h2>
-                            <h3 className='currency-price' >
-                                {this.props.currencySymbol}{this.props.price}
-                            </h3>
-                        </div>
-                    );
+                                            <img
+                                                className={`product-image ${!inStock ? 'half-opacity' : ''}`}
+                                                src={gallery[0]}
+                                                alt={name}
+                                            />
+
+
+                                            {!inStock ? (
+                                                <h2 className="out-of-stock">
+                                                    OUT OF STOCK
+                                                </h2>
+                                            ) : this.state.mouseHovered && (
+                                                <button 
+                                                    className='add-to-cart-button'
+                                                    onClick={(event) => handleAddProductToCart(event, this.props.product)}
+                                                >
+                                                    <BsCart2 />
+                                                </button>
+                                            )}
+
+                                        </div>
+                                        
+                                        <h2 className='product-name'>{brand} {name}</h2>
+                                        <h3 className='currency-price' >
+                                            {this.props.currencySymbol}{this.props.price}
+                                        </h3>
+                                    </div>
+                                );
+                            }}
+                        </CartConsumer>
+                    )
                 }}
-            </CartConsumer>
+            </ProductsConsumer>
+
         );
     };
 };

@@ -16,7 +16,7 @@ export default class App extends Component {
 					<Routes>
 						<Route path='/' element={<Products/>} />
 						<Route path='/cart' element={<Cart />} />
-						<Route path='/products/:id' element={<Product />} />
+						<Route path='/products/:category/:id' element={<Product />} />
 					</Routes>
 				</BrowserRouter>
 			</>

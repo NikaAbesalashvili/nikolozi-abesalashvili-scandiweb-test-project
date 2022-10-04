@@ -45,7 +45,7 @@ export default class Product extends Component {
     };
 
     componentDidMount() {
-        const productId = window.location.href.split('products')[1].slice(1);
+        const productId = window.location.href.split('products')[1].slice(1).split('/')[1];
         this.fetchProduct(productId);
     };
 
