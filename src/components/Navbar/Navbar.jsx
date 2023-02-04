@@ -37,8 +37,13 @@ export default class Navbar extends Component {
                                             {categories && (
                                                 <ul className="categories">
                                                     {categories.map((category, index) => (
-                                                        <li key={index} onClick={() => handleCategoryChange(category.name)} >
-                                                            {category.name}
+                                                        <li key={index} >
+                                                            <Link
+                                                                to={`${category.name === 'all' ? '/' : `/:${category.name}`}`}
+                                                                onClick={() => handleCategoryChange(category.name)}
+                                                            >
+                                                                {category.name}
+                                                            </Link>
                                                         </li>
                                                     ))}
                                                 </ul>

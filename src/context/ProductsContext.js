@@ -51,6 +51,7 @@ export class ProductsProvider extends Component {
 				console.log(error);
 			});
 		const { products } = apiProducts.category;
+		
 		this.setState({ products });
 	};
 

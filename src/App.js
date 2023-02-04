@@ -14,7 +14,7 @@ export default class App extends Component {
 					<Navbar />
 
 					<Routes>
-						<Route path='/' element={<Products/>} />
+						<Route path='/:category?' element={<Products/>} />
 						<Route path='/cart' element={<Cart />} />
 						<Route path='/products/:category/:id' element={<Product />} />
 					</Routes>

@@ -1,4 +1,4 @@
-import { Component } from "react";
+import { Component, createRef } from "react";
 
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import './Select.css';
@@ -11,8 +11,18 @@ export default class Select extends Component {
             dropDownExpanded: false,
         };
 
+        this.currenciesContainerRef = createRef();
+        this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handleDropdownExpand = this.handleDropdownExpand.bind(this);
         this.closeDropdown = this.closeDropdown.bind(this);
+    };
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    };
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
     };
 
     handleDropdownExpand() {
@@ -22,6 +32,12 @@ export default class Select extends Component {
     closeDropdown(newCurrency) {
         this.props.handleCurrencyChange(newCurrency);
         this.setState({ dropDownExpanded: !this.state.dropDownExpanded });
+    };
+
+    handleClickOutside(event) {
+        if(this.currenciesContainerRef && !this.currenciesContainerRef.current?.contains(event.target)) {
+            this.setState({ dropDownExpanded: false });
+        }
     };
 
     render() {
@@ -45,7 +61,7 @@ export default class Select extends Component {
                 </div>
 
                 {this.state.dropDownExpanded && (
-                    <div className="container">
+                    <div className="container" ref={this.currenciesContainerRef} >
                         <div className="currencies">
                             {this.props.currencies.map((currency, index) => (
                                 <h2

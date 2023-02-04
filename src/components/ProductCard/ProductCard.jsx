@@ -59,12 +59,12 @@ export default class ProductCard extends Component {
                                                     OUT OF STOCK
                                                 </h2>
                                             ) : this.state.mouseHovered && (
-                                                <button 
+                                                <div
                                                     className='add-to-cart-button'
                                                     onClick={(event) => handleAddProductToCart(event, this.props.product)}
                                                 >
                                                     <BsCart2 />
-                                                </button>
+                                                </div>
                                             )}
 
                                         </div>

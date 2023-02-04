@@ -15,8 +15,10 @@ export default class MiniCart extends Component {
         };
 
         this.wrapperRef = createRef();
+        this.miniCartButtonRef = createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
         this.handleCartOpen = this.handleCartOpen.bind(this);
+        this.handleMiniCartRedirect = this.handleMiniCartRedirect.bind(this);
     };
 
     componentDidMount() {
@@ -28,13 +30,20 @@ export default class MiniCart extends Component {
     };
 
     handleClickOutside(event) {
-        if((this.wrapperRef && !this.wrapperRef.current?.contains(event.target))) {
+        if((this.wrapperRef && !this.wrapperRef.current?.contains(event.target)) || (this.state.miniCartOpened && this.miniCartButtonRef.current.contains(event.target))) {
             this.setState({ miniCartOpened: false });
+            document.body.style.overflow = 'auto';
         };
     };
 
     handleCartOpen() {
         this.setState({ miniCartOpened: !this.state.miniCartOpened });
+        document.body.style.overflow = 'hidden';
+    };
+
+    handleMiniCartRedirect() {
+        this.setState({ miniCartOpened: false });
+        document.body.style.overflow = 'auto';
     };
 
     render() {
@@ -48,6 +57,7 @@ export default class MiniCart extends Component {
                 <button
                     className='cart-button'
                     onClick={this.handleCartOpen}
+                    ref={this.miniCartButtonRef}
                 >
                         <BsCart2/>
                 </button>
@@ -56,7 +66,7 @@ export default class MiniCart extends Component {
                     <div className="mini-cart-box" >
                         <div className="mini-cart-products" ref={this.wrapperRef} >
                         
-                            {productsInCart.map((productInCart) => (
+                            {productsInCart && productsInCart.map((productInCart) => (
                                 <CartProduct
                                     variant='small'
                                     product={productInCart}
@@ -65,7 +75,11 @@ export default class MiniCart extends Component {
                             ))}
 
                             <div className="cart-buttons">
-                                <Link to='/cart' className='to-cart-link'>
+                                <Link
+                                    to='/cart'
+                                    className='to-cart-link'
+                                    onClick={this.handleMiniCartRedirect}
+                                >
                                     VIEW BAG
                                 </Link>
                                 

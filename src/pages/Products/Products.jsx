@@ -5,6 +5,11 @@ import { ProductCard } from '../../components';
 import './Products.css';
 
 export default class Products extends Component {
+
+    componentDidUpdate() {
+        console.log('COMPONENT UPDATED');
+    };
+
     render() {
 
         return (
