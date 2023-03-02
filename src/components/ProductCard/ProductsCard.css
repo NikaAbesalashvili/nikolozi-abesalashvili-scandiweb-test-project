@@ -1,5 +1,5 @@
 .product-card {
-    padding: 1.5rem;
+    padding: 0 1.5rem 1.5rem 1.5rem;
 }
 
 .product-card:hover {
@@ -14,7 +14,7 @@
     position: relative;
     margin-bottom: 1.3rem;
     aspect-ratio: 1 / 1.2;
-    width: 350px;
+    width: 250px;
 }
 
 .out-of-stock {
@@ -37,14 +37,16 @@
     color: var(--dark-grey);
 }
 
-
 .add-to-cart-button {
     padding: 1rem;
     position: absolute;
     bottom: 0;
-    right: 5%;
-    aspect-ratio: 1.2 / 1;
-    font-size: 3.25em;
+    right: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    font-size: 2.25em;
     color: var(--white);
     background-color: var(--light-green);
     cursor: pointer;

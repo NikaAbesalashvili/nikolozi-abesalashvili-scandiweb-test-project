@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { LOCAL_STORAGE_PREFIX } from '../constants';
 import { ProductsService } from '../services';
+import { removeDublicates } from '../utils';
 
 export const ProductsContext = React.createContext();
 export const ProductsConsumer = ProductsContext.Consumer;
@@ -11,15 +12,17 @@ export class ProductsProvider extends Component {
         this.state = {
 			categories: [],
 			currencies: [],
+			attributes: [],
             products: [],
 			currencySymbol: '$',
 			activeCurrency: 0,
-			selectedCategory: 'all'
+			selectedCategoryIndex: 0,
         };
 
-		this.fetchCategories = this.fetchCategories.bind(this)
-		this.fetchCurrencies = this.fetchCurrencies.bind(this)
-		this.fetchProducts = this.fetchProducts.bind(this)
+		this.fetchCategories = this.fetchCategories.bind(this);
+		this.fetchCurrencies = this.fetchCurrencies.bind(this);
+		this.fetchAttributes = this.fetchAttributes.bind(this);
+		this.fetchProducts = this.fetchProducts.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
     };
@@ -45,6 +48,17 @@ export class ProductsProvider extends Component {
 		this.setState({ currencies });
 	};
 
+	async fetchAttributes() {
+		const apiAttributes = await ProductsService.getAttributes()
+			.catch((error) => {
+				console.log(error);
+			});
+
+		const { categories } = apiAttributes;
+
+		this.setState({ attributes: removeDublicates(categories) });
+	};
+
 	async fetchProducts() {
 		const apiProducts = await ProductsService.getProducts()
 			.catch((error) => {
@@ -55,8 +69,8 @@ export class ProductsProvider extends Component {
 		this.setState({ products });
 	};
 
-	handleCategoryChange(newCategory) {
-        this.setState({ selectedCategory: newCategory });
+	handleCategoryChange(newIndex) {
+        this.setState({ selectedCategoryIndex: newIndex });
 
 		const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
 
@@ -65,7 +79,7 @@ export class ProductsProvider extends Component {
 
 			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
 				...parsedLocalStorageData,
-				selectedCategory: newCategory,
+				selectedCategoryIndex: newIndex,
 			}));
 		};
     };
@@ -98,6 +112,7 @@ export class ProductsProvider extends Component {
     componentDidMount() {
 		this.fetchCategories();
 		this.fetchCurrencies();
+		this.fetchAttributes();
 		this.fetchProducts();
 
 		let localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
@@ -128,18 +143,31 @@ export class ProductsProvider extends Component {
 
     render() {
 
-        const { categories, currencies, products, currencySymbol, activeCurrency, selectedCategory } = this.state;
-        const { handleCategoryChange, handleCurrencyChange } = this;
+        const {
+			categories,
+			attributes,
+			currencies,
+			products,
+			currencySymbol,
+			activeCurrency,
+			selectedCategoryIndex
+		} = this.state;
+
+        const {
+			handleCategoryChange,
+			handleCurrencyChange
+		} = this;
 
 		return (
             <ProductsContext.Provider 
                 value={{
 					categories,
+					attributes,
 					currencies,
                     products,
                     currencySymbol,
                     activeCurrency,
-                    selectedCategory,
+                    selectedCategoryIndex,
                     handleCategoryChange,
                     handleCurrencyChange,
                 }} 

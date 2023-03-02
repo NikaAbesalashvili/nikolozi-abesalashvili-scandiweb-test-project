@@ -49,6 +49,26 @@ export const GET_CATEGORIES = gql`
     }
 `;
 
+export const GET_ATTRIBUTES = gql`
+    query Attributes {
+        categories {
+            name
+            products {
+                attributes {
+                    id
+                    name
+                    type
+                    items {
+                        displayValue
+                        value
+                        id
+                    }
+                }
+            }
+        }
+    }
+`
+
 export const GET_PRODUCT = gql`
     query Product($id: String!) {
         product(id: $id) {

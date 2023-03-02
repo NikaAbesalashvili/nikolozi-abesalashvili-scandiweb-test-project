@@ -40,7 +40,7 @@ export default class Navbar extends Component {
                                                         <li key={index} >
                                                             <Link
                                                                 to={`${category.name === 'all' ? '/' : `/:${category.name}`}`}
-                                                                onClick={() => handleCategoryChange(category.name)}
+                                                                onClick={() => handleCategoryChange(index)}
                                                             >
                                                                 {category.name}
                                                             </Link>

@@ -1,0 +1,26 @@
+.attribute-values {
+    display: flex;
+    gap: .7rem;
+}
+
+.color-attribute {
+    aspect-ratio: 1 / 1;
+    width: 1rem;
+    cursor: pointer;
+}
+
+.color-attribute:hover {
+    border: 1px solid var(--dark-grey);
+}
+
+.selected-color {
+    border: 1px solid var(--dark-grey);
+}
+
+.attribute-value {
+    cursor: pointer;
+}
+
+.selected-filter-value {
+    color: var(--light-green);
+}

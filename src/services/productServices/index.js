@@ -1,5 +1,5 @@
 import { apolloClient } from '../../graphql';
-import { GET_PRODUCTS, GET_CURRENCIES, GET_CATEGORIES, GET_PRODUCT } from './queries';
+import { GET_PRODUCTS, GET_CURRENCIES, GET_CATEGORIES, GET_ATTRIBUTES, GET_PRODUCT } from './queries';
 
 class ProductsService {
 
@@ -30,6 +30,17 @@ class ProductsService {
             const response = await apolloClient.query({ query: GET_CATEGORIES });
 
             if(!response || !response.data) throw new Error('No categories available');
+            return response.data;
+        } catch(error) {
+            throw error;
+        };
+    };
+
+    async getAttributes() {
+        try {
+            const response = await apolloClient.query({ query: GET_ATTRIBUTES });
+
+            if(!response || !response.data) throw new Error('No attributes available');
             return response.data;
         } catch(error) {
             throw error;

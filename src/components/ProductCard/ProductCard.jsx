@@ -27,7 +27,7 @@ export default class ProductCard extends Component {
             <ProductsConsumer>
                 {(productsProps) => {
                     
-                    const { selectedCategory } = productsProps;
+                    const { categories, selectedCategoryIndex } = productsProps;
 
                     return (
                         <CartConsumer>
@@ -44,7 +44,7 @@ export default class ProductCard extends Component {
                                         onMouseEnter={() => this.setState({ mouseHovered: true })}
                                         onMouseLeave={() => this.setState({ mouseHovered: false })}
                                     >
-                                        {this.state.productClicked && <Navigate to={`/products/${selectedCategory}/${id}`} />}
+                                        {this.state.productClicked && <Navigate to={`/products/${categories[selectedCategoryIndex].name}/${id}`} />}
                                         <div className="image-section">
 
                                             <img
