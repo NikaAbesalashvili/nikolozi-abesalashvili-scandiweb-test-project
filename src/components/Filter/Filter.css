@@ -1,6 +1,12 @@
 .filter {
+    padding-top: 1.5rem;
     width: 400px;
     display: flex;
     gap: 1rem;
     flex-direction: column;
+}
+
+.filter-title {
+    font-size: 2em;
+    font-weight: 500;
 }

@@ -16,6 +16,7 @@ export default class Filter extends Component {
 
         return (
             <div className='filter' >
+                <h2 className="filter-title" >FIlter</h2>
                 {attributes.map((attribute, index) => (
                     <FilterParameter
                         key={index}

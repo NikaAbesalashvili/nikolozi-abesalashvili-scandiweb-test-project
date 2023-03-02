@@ -13,6 +13,7 @@ export class ProductsProvider extends Component {
 			categories: [],
 			currencies: [],
 			attributes: [],
+			selectedAttributes: {},
             products: [],
 			currencySymbol: '$',
 			activeCurrency: 0,
@@ -25,6 +26,7 @@ export class ProductsProvider extends Component {
 		this.fetchProducts = this.fetchProducts.bind(this);
         this.handleCategoryChange = this.handleCategoryChange.bind(this);
         this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+		this.handleAttributeSelect = this.handleAttributeSelect.bind(this);
     };
 
 	async fetchCategories() {
@@ -109,6 +111,30 @@ export class ProductsProvider extends Component {
 		};
 	};
 
+	handleAttributeSelect(attributeName, attributeValue) {
+
+		if(!this.state.selectedAttributes[attributeName] || this.state.selectedAttributes[attributeName] !== attributeValue) {
+			let newSelectedAttributes = {
+				...this.state.selectedAttributes,
+				[attributeName]: attributeValue
+			};
+			this.setState({ selectedAttributes: newSelectedAttributes });
+		} else {
+			let newSelectedAttributes = {}
+			
+			Object.keys(this.state.selectedAttributes).forEach((key) => {
+				if(key !== attributeName) {
+					newSelectedAttributes = {
+						...newSelectedAttributes,
+						[key]: this.state.selectedAttributes[key]
+					}
+				}
+			});
+			
+			this.setState({ selectedAttributes: newSelectedAttributes });
+		}
+	};
+
     componentDidMount() {
 		this.fetchCategories();
 		this.fetchCurrencies();
@@ -155,7 +181,8 @@ export class ProductsProvider extends Component {
 
         const {
 			handleCategoryChange,
-			handleCurrencyChange
+			handleCurrencyChange,
+			handleAttributeSelect,
 		} = this;
 
 		return (
@@ -170,6 +197,7 @@ export class ProductsProvider extends Component {
                     selectedCategoryIndex,
                     handleCategoryChange,
                     handleCurrencyChange,
+					handleAttributeSelect,
                 }} 
             >
                 {this.props.children}

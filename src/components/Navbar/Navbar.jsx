@@ -49,14 +49,12 @@ export default class Navbar extends Component {
                                                 </ul>
                                             )}
 
-                                            <Link to='/' >
-                                                <img
-                                                    className='logo'
-                                                    src={logo}
-                                                    alt="Logo"
-                                                />
-                                            </Link>
-
+                                            <img
+                                                className='logo'
+                                                src={logo}
+                                                alt="Logo"
+                                            />
+                                            
                                             <div className='cart-and-currencies' >
                                                     
                                                 <Select
