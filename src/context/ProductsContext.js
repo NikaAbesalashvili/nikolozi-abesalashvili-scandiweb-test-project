@@ -153,7 +153,7 @@ export class ProductsProvider extends Component {
 		this.setState({ selectedAttributes: newSelectedAttributes });
 		generateFilterUrl(newSelectedAttributes);
 
-		const newFilteredProducts =  filterProductsByAttributes(this.state.products, newSelectedAttributes);
+		const newFilteredProducts = Object.keys(newSelectedAttributes).length > 0 ? filterProductsByAttributes(this.state.products, newSelectedAttributes) : this.state.products;
 		this.setState({ filteredProducts: newFilteredProducts });
 	};
 
