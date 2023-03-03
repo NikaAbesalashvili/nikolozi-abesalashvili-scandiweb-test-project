@@ -14,7 +14,7 @@ export default class Products extends Component {
                 {(productsProps) => {
                     
                     const {
-                        products,
+                        filteredProducts,
                         categories,
                         attributes,
                         selectedCategoryIndex,
@@ -22,7 +22,7 @@ export default class Products extends Component {
                     } = productsProps
 
                     return (
-                        products.length > 1 && (
+                        filteredProducts.length > 1 && (
                             <section className="products-section">
                                 <h1 className="category-name">
                                     {categories[selectedCategoryIndex].name}
@@ -32,26 +32,14 @@ export default class Products extends Component {
                                     <Filter attributes={attributes[selectedCategoryIndex]} />
 
                                     <div className="products-box">
-                                        {products.map((product) => (
-                                            categories[selectedCategoryIndex].name !== 'all' ? (
-                                                categories[selectedCategoryIndex].name === product.category && (
-                
-                                                    <ProductCard
-                                                        product={product}
-                                                        currencySymbol={product.prices[activeCurrency].currency.symbol}
-                                                        price={product.prices[activeCurrency].amount}
-                                                        key={product.id}
-                
-                                                    />
-                                                )
-                                            ) : (
-                                                <ProductCard
-                                                    product={product}
-                                                    currencySymbol={product.prices[activeCurrency].currency.symbol}
-                                                    price={product.prices[activeCurrency].amount}
-                                                    key={product.id}
-                                                />
-                                            )
+                                        {filteredProducts.map((product) => (
+
+                                            <ProductCard
+                                                product={product}
+                                                currencySymbol={product.prices[activeCurrency].currency.symbol}
+                                                price={product.prices[activeCurrency].amount}
+                                                key={product.id}
+                                            />
                                         ))}
                                     </div>
                                 </div>

@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import { ProductsConsumer } from '../../../context';
 
 import './FilterParameter.css';
@@ -16,7 +17,11 @@ export default class FilterParameter extends Component {
 
     handleAttributeValueSelect(valueIndex, selectCallback) {
         this.setState({ selectedValueIndex: valueIndex !== this.state.selectedValueIndex ? valueIndex : null });
-        selectCallback(this.props.attributeName, this.props.attributeValues[valueIndex].value);
+        
+        let attributeName = this.props.attributeName.split(' ').join('_');
+        let attributeValue = this.props.attributeName === 'Color' ? this.props.attributeValues[valueIndex].displayValue : this.props.attributeValues[valueIndex].value
+
+        selectCallback(attributeName,  attributeValue);
     };
 
     render() {
@@ -29,23 +34,35 @@ export default class FilterParameter extends Component {
 
                 {(productsProps) => {
 
-                    const { handleAttributeSelect } = productsProps;
+                    const {
+                        categories,
+                        selectedCategoryIndex,
+                        handleAttributeSelect,
+                    } = productsProps;
 
                     return (
                         <div className='attribute' >
                             <h3 className='attribute-name' >{attributeName}</h3>
-                            <div className="attribute-values">
+                            <ul className="attribute-values">
                                 {attributeValues.map((item, index) => (
-                                        <span
-                                            className={`attribute-value${this.state.selectedValueIndex === index ? attributeName !== 'Color' ? ' selected-filter-value' : ' selected-color' : ''} ${attributeName !== 'Color' ? '' : 'color-attribute'}`}
+                                        <li
+                                            className="attribute-value"
                                             key={index}
                                             style={{ backgroundColor: attributeName !== 'Color' ? 'transparent': item.value}}
                                             onClick={() => this.handleAttributeValueSelect(index, handleAttributeSelect)}
                                         >
-                                            {attributeName !== 'Color' && item.displayValue}
-                                        </span>
+                                            <Link
+                                                className={`attribute-link${this.state.selectedValueIndex === index ? attributeName !== 'Color' ? ' selected-filter-value' : ' selected-color' : ''}${attributeName !== 'Color' ? '' : ' color-attribute'}`} 
+                                                to={{
+                                                    pathname: categories[selectedCategoryIndex].name === 'all' ? '/' : `/${categories[selectedCategoryIndex].name}`,
+                                                }}
+                                            >
+                                                {attributeName !== 'Color' && item.displayValue}
+                                            </Link>
+
+                                        </li>
                                 ))}
-                            </div>
+                            </ul>
                         </div>
                     );
                 }}

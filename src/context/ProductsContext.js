@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { LOCAL_STORAGE_PREFIX } from '../constants';
 import { ProductsService } from '../services';
-import { removeDublicates } from '../utils';
+import { removeDublicates, generateFilterUrl, filterProductsByAttributes } from '../utils';
 
 export const ProductsContext = React.createContext();
 export const ProductsConsumer = ProductsContext.Consumer;
@@ -15,6 +15,7 @@ export class ProductsProvider extends Component {
 			attributes: [],
 			selectedAttributes: {},
             products: [],
+			filteredProducts: [],
 			currencySymbol: '$',
 			activeCurrency: 0,
 			selectedCategoryIndex: 0,
@@ -68,11 +69,27 @@ export class ProductsProvider extends Component {
 			});
 		const { products } = apiProducts.category;
 		
-		this.setState({ products });
+		this.setState({
+			products,
+			filteredProducts: products,
+		});
 	};
 
 	handleCategoryChange(newIndex) {
-        this.setState({ selectedCategoryIndex: newIndex });
+
+		let newFilteredProducts = this.state.products;
+
+		if(this.state.categories[newIndex].name !== 'all') {
+			newFilteredProducts = this.state.products.filter((product) => {
+				return product.category === this.state.categories[newIndex].name
+			});
+		}
+
+        this.setState({
+			selectedCategoryIndex: newIndex,
+			selectedAttributes: {},
+			filteredProducts: newFilteredProducts,
+		});
 
 		const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
 
@@ -113,15 +130,16 @@ export class ProductsProvider extends Component {
 
 	handleAttributeSelect(attributeName, attributeValue) {
 
+		let newSelectedAttributes;
+
 		if(!this.state.selectedAttributes[attributeName] || this.state.selectedAttributes[attributeName] !== attributeValue) {
-			let newSelectedAttributes = {
+			newSelectedAttributes = {
 				...this.state.selectedAttributes,
 				[attributeName]: attributeValue
 			};
-			this.setState({ selectedAttributes: newSelectedAttributes });
 		} else {
-			let newSelectedAttributes = {}
-			
+			newSelectedAttributes = {}
+
 			Object.keys(this.state.selectedAttributes).forEach((key) => {
 				if(key !== attributeName) {
 					newSelectedAttributes = {
@@ -130,9 +148,13 @@ export class ProductsProvider extends Component {
 					}
 				}
 			});
-			
-			this.setState({ selectedAttributes: newSelectedAttributes });
 		}
+
+		this.setState({ selectedAttributes: newSelectedAttributes });
+		generateFilterUrl(newSelectedAttributes);
+
+		const newFilteredProducts =  filterProductsByAttributes(this.state.products, newSelectedAttributes);
+		this.setState({ filteredProducts: newFilteredProducts });
 	};
 
     componentDidMount() {
@@ -147,13 +169,13 @@ export class ProductsProvider extends Component {
 			let {
 				activeCurrency,
 				currencySymbol,
-				selectedCategory,
+				selectedCategoryIndex
 			} = JSON.parse(localStorageData);
 
 			this.setState({
 				activeCurrency,
 				currencySymbol,
-				selectedCategory,
+				selectedCategoryIndex,
 			});
 			
 		} else {
@@ -173,10 +195,11 @@ export class ProductsProvider extends Component {
 			categories,
 			attributes,
 			currencies,
-			products,
+			filteredProducts,
 			currencySymbol,
 			activeCurrency,
-			selectedCategoryIndex
+			selectedCategoryIndex,
+			selectedAttributes,
 		} = this.state;
 
         const {
@@ -191,10 +214,11 @@ export class ProductsProvider extends Component {
 					categories,
 					attributes,
 					currencies,
-                    products,
+                    filteredProducts,
                     currencySymbol,
                     activeCurrency,
                     selectedCategoryIndex,
+					selectedAttributes,
                     handleCategoryChange,
                     handleCurrencyChange,
 					handleAttributeSelect,
