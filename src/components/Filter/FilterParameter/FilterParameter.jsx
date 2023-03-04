@@ -10,6 +10,7 @@ export default class FilterParameter extends Component {
         super(props);
         this.state = {
             selectedValueIndex: null,
+            pageUrl: '',
         };
 
         this.handleAttributeValueSelect = this.handleAttributeValueSelect.bind(this)
@@ -21,7 +22,7 @@ export default class FilterParameter extends Component {
         let attributeName = this.props.attributeName.split(' ').join('_');
         let attributeValue = this.props.attributeName === 'Color' ? this.props.attributeValues[valueIndex].displayValue : this.props.attributeValues[valueIndex].value
 
-        selectCallback(attributeName,  attributeValue);
+        selectCallback(attributeName, attributeValue);
     };
 
     render() {
@@ -37,6 +38,7 @@ export default class FilterParameter extends Component {
                     const {
                         categories,
                         selectedCategoryIndex,
+                        selectedAttributes,
                         handleAttributeSelect,
                     } = productsProps;
 
@@ -52,7 +54,7 @@ export default class FilterParameter extends Component {
                                             onClick={() => this.handleAttributeValueSelect(index, handleAttributeSelect)}
                                         >
                                             <Link
-                                                className={`attribute-link${this.state.selectedValueIndex === index ? attributeName !== 'Color' ? ' selected-filter-value' : ' selected-color' : ''}${attributeName !== 'Color' ? '' : ' color-attribute'}`} 
+                                                className={`attribute-link${(this.state.selectedValueIndex === index && attributeName.split(' ').join('_') in selectedAttributes) ? attributeName !== 'Color' ? ' selected-filter-value' : ' selected-color' : ''}${attributeName !== 'Color' ? '' : ' color-attribute'}`} 
                                                 to={{
                                                     pathname: categories[selectedCategoryIndex].name === 'all' ? '/' : `/${categories[selectedCategoryIndex].name}`,
                                                 }}
