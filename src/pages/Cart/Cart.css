@@ -47,3 +47,7 @@
     font-weight: 600;
     color: var(--white);
 }
+
+.no-pruducts-in-cart {
+    color: var(--semi-gray);
+}

@@ -103,7 +103,7 @@ export class CartProvider extends Component {
             productsInCart: newProducts,
             taxPrice: (localStorageData.totalAmount - productPrice) * 21 / 100,
             totalPrice: localStorageData.totalAmount - productPrice,
-            quantity: quantity - 1,
+            quantity: quantity - 1 !== 0 ? quantity - 1 : 0,
         });
 
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
@@ -160,10 +160,10 @@ export class CartProvider extends Component {
             }, 0);
            
             this.setState({
-                productsInCart: parsedLocalStorageData.productsInCart,
-                taxPrice: parsedLocalStorageData.totalAmount * 21 / 100,
-                quantity,
-                totalPrice: parsedLocalStorageData.totalAmount,
+                productsInCart: parsedLocalStorageData.productsInCart ? parsedLocalStorageData.productsInCart : [],
+                taxPrice: parsedLocalStorageData.totalAmount ? parsedLocalStorageData.totalAmount * 21 / 100 : 0,
+                quantity: quantity > 0 ? quantity : 0,
+                totalPrice: parsedLocalStorageData.totalAmount ? parsedLocalStorageData.totalAmount : 0,
             });
         }
     };

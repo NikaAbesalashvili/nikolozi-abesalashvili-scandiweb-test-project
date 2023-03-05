@@ -47,7 +47,7 @@ export default class MiniCart extends Component {
     };
 
     render() {
-        const { productsInCart } = this.props;
+        const { productsInCart, totalPrice, currencySymbol } = this.props;
 
         return (
 
@@ -73,6 +73,15 @@ export default class MiniCart extends Component {
                                     key={productInCart.id}
                                 />
                             ))}
+
+                            {totalPrice > 0 && (
+                                <div className="total-price-container" >
+                                    <span className="text-span" >Total</span>
+                                    <span className="value-span" >
+                                        {currencySymbol}{`${totalPrice}`.slice(0, `${totalPrice}`.indexOf('.') + 3)}
+                                    </span>
+                                </div>
+                            )}
 
                             <div className="cart-buttons">
                                 <Link

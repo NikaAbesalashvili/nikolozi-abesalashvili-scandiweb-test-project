@@ -38,11 +38,13 @@ export default class Cart extends Component {
                                 <h1 className="cart-title" >CART</h1>
                 
                                 <div className="products">
-                                    {productsInCart.map((product) => (
+                                    {productsInCart.length > 0 ? productsInCart.map((product) => (
                                         product.amount > 0 && (
                                             <CartProduct noBorders={false} product={product} key={product.id} />
                                         )
-                                    ))}
+                                    )) : (
+                                        <h2 className="no-pruducts-in-cart" >NO PRODUCTS IN CART</h2>
+                                    )}
                                 </div>
                 
                                 {productsInCart.length > 0 && (

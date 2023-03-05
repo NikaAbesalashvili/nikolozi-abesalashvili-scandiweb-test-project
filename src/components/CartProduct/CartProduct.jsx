@@ -61,7 +61,7 @@ export default class CartProduct extends Component {
                                                                     style={{ backgroundColor: attribute.id !== 'Color' ? '': item.value}}
                                                                     onClick={() => handleAttributeChange(id, index, attribute.id, item.displayValue)}
                                                                 >
-                                                                    {attribute.id !== 'Color' && item.displayValue}
+                                                                    {attribute.id !== 'Color' && item.value}
                                                                 </span>
                                                             ))}
                             

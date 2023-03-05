@@ -71,3 +71,25 @@
     background-color: var(--light-green);
     color: var(--white);
 }
+
+.total-price-container {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text-span,
+.value-span {
+    font-size: 1em;
+}
+
+.text-span {
+    font-family: 'Roboto';
+    font-weight: 500;
+}
+
+.value-span {
+    font-family: 'Raleway';
+    font-weight: 700;
+}
