@@ -22,7 +22,7 @@ export default class Products extends Component {
                     } = productsProps
 
                     return (
-                        filteredProducts.length > 1 && (
+                        filteredProducts.length > 0 && (
                             <section className="products-section">
                                 <h1 className="category-name">
                                     {categories[selectedCategoryIndex].name}

@@ -19,6 +19,18 @@
     background-color: var(--transparent-cart-color);
 }
 
+.quantity-heading {
+    margin: 1rem 0 1.5rem 0;
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--dark-grey);
+
+}
+
+.quantity-heading > span {
+    font-weight: 500;
+}
+
 .mini-cart-products {
     padding: 1rem;    
     width: fit-content;
@@ -85,11 +97,9 @@
 }
 
 .text-span {
-    font-family: 'Roboto';
     font-weight: 500;
 }
 
 .value-span {
-    font-family: 'Raleway';
     font-weight: 700;
 }

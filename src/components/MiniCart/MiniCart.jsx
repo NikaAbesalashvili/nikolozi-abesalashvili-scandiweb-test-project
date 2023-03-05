@@ -47,7 +47,7 @@ export default class MiniCart extends Component {
     };
 
     render() {
-        const { productsInCart, totalPrice, currencySymbol } = this.props;
+        const { productsInCart, totalPrice, quantity, currencySymbol } = this.props;
 
         return (
 
@@ -65,6 +65,10 @@ export default class MiniCart extends Component {
                 {this.state.miniCartOpened && (
                     <div className="mini-cart-box" >
                         <div className="mini-cart-products" ref={this.wrapperRef} >
+
+                            {quantity && (
+                                <h3 className="quantity-heading" >My Bag, <span>{quantity} items</span></h3>
+                            )}
                         
                             {productsInCart && productsInCart.map((productInCart) => (
                                 <CartProduct

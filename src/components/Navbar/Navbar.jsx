@@ -32,6 +32,7 @@ export default class Navbar extends Component {
                                 const {
                                     productsInCart,
                                     totalPrice,
+                                    quantity,
                                 } = cartProps;
 
                                 return (
@@ -67,7 +68,12 @@ export default class Navbar extends Component {
                                                     handleCurrencyChange={handleCurrencyChange}
                                                 />
 
-                                                <MiniCart productsInCart={productsInCart} totalPrice={totalPrice} currencySymbol={currencySymbol} />
+                                                <MiniCart
+                                                    productsInCart={productsInCart}
+                                                    totalPrice={totalPrice}
+                                                    currencySymbol={currencySymbol}
+                                                    quantity={quantity}
+                                                />
 
                                             </div>
 
