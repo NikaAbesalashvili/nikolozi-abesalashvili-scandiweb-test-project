@@ -11,7 +11,8 @@ export default class Product extends Component {
         this.state = {
             product: {},
             activeImage: 0,
-            selectedAttributes: [],
+            selectedAttributeIndex: 0,
+            selectedAttributes: {},
         };
 
         this.fetchProduct = this.fetchProduct.bind(this);
@@ -28,7 +29,8 @@ export default class Product extends Component {
         const { product } = apiResponse;
         this.setState({
             product,
-            selectedAttributes: product.attributes.map((attribute) => ({ [attribute.id]: attribute.items[0].displayValue })),
+            selectedAttributes: product.attributes.reduce((selectedAttributes, attribute) => ({ ...selectedAttributes, [attribute.id]: attribute.items[0].value }), {}),
+            selectedAttributeIndex: 0,
         });
     };
 
@@ -37,10 +39,14 @@ export default class Product extends Component {
     };
 
     handleAttributeSelect(attributeName, attributeValue, attributeIndex) {
-        let attributes = this.state.selectedAttributes;
-        attributes[attributeIndex][attributeName] = attributeValue;
+        const newSelectedAttributes = {
+            ...this.state.selectedAttributes,
+            [attributeName]: attributeValue,
+        }
+
         this.setState({
-            selectedAttributes: {...attributes, [attributeName]: attributeValue }
+            selectedAttributes: newSelectedAttributes,
+            selectedAttributeIndex: attributeIndex,
         });
     };
 
@@ -97,15 +103,15 @@ export default class Product extends Component {
                         
                                                 {this.state.product.attributes && (
                                                     <div className="attributes">
-                                                        {this.state.product.attributes.map((attribute, index) => (
+                                                        {this.state.product.attributes.map((attribute) => (
                                                             
                                                             <div className="attribute" key={attribute.id} >
                                                                 <h5 className="attribute-name">{attribute.id}:</h5>
                                                                 <div className="attribute-items">
                                                                     
-                                                                    {attribute.items.map((item) => (
+                                                                    {attribute.items.map((item, index) => (
                                                                         <span
-                                                                            className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${this.state.selectedAttributes[index][attribute.id] === item.displayValue ? attribute.id !== 'Color' ? 'selected': 'selected-color' : ''}`}
+                                                                            className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${this.state.selectedAttributeIndex === index ? attribute.id === 'Color' ? 'selected-color' : 'selected' : ''}`}
                                                                             key={item.id}
                                                                             style={{ backgroundColor: attribute.id !== 'Color' ? 'auto': item.value}}
                                                                             onClick={() => this.handleAttributeSelect(attribute.id, item.displayValue, index)}

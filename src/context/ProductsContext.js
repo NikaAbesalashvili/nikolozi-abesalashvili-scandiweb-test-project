@@ -175,14 +175,14 @@ export class ProductsProvider extends Component {
 			this.setState({
 				activeCurrency,
 				currencySymbol,
-				selectedCategoryIndex,
+				selectedCategoryIndex: selectedCategoryIndex ? selectedCategoryIndex : 0,
 			});
 			
 		} else {
 			let dataToSave = {
 				activeCurrency: this.state.activeCurrency,
 				currencySymbol: this.state.currencySymbol,
-				selectedCategory: this.state.selectedCategory,
+				selectedCategoryIndex: this.state.selectedCategoryIndex,
 			};
 
 			localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify(dataToSave));

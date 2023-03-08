@@ -25,126 +25,199 @@ export class CartProvider extends Component {
     handleAddProductToCart(event, product, selectedAttributes = null) {
         event.stopPropagation();
 
-        const { id, brand, name, gallery, prices, attributes } = product;
-        const cartProduct = {
-            id,
-            name,
-            brand,
-            gallery,
-            prices,
-            attributes,
-            amount: 1,
-        };
+        let newProducts = this.state.productsInCart;
+        let localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
 
-        if(Object.keys(selectedAttributes || !selectedAttributes).length === 0) {
-            selectedAttributes = attributes.map((attribute) => {
-                return { [attribute.id]: attribute.items[0].displayValue }
-            });
-            cartProduct.selectedAttributes = selectedAttributes;
+        if(!selectedAttributes) {
+            let cartProductToAdd = {
+                ...product,
+                selectedAttributes: product.attributes.reduce((defaultAttributes, attribute) => ({...defaultAttributes, [attribute.id]: attribute.items[0].value }), {}),
+                amount: 1
+            }
+
+            if(this.state.productsInCart.every((cartProduct) => cartProduct.id !== cartProductToAdd.id)) {
+                newProducts = [
+                    ...this.state.productsInCart,
+                    cartProductToAdd
+                ];
+            }
+
         } else {
-            cartProduct.selectedAttributes = selectedAttributes;
+            const isAcceptable = newProducts.every((cartProduct) => {
+                return (
+                    (cartProduct.id === product.id && JSON.stringify(cartProduct.selectedAttributes) !== JSON.stringify(selectedAttributes)) ||
+                    (cartProduct.id !== product.id)
+                );
+            });
+
+            if(!newProducts.length || isAcceptable) {
+                newProducts = [
+                    ...newProducts,
+                    {
+                        ...product,
+                        selectedAttributes,
+                        amount: 1,
+                    }
+                ]
+            }
         }
-        
-        if(this.state.productsInCart?.length < 1 || !this.state.productsInCart) {
-            this.setState({ productsInCart: [cartProduct] });
-            
-            const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
-            
-            const price = cartProduct.prices[localStorageData.activeCurrency].amount;
+
+        if(newProducts !== this.state.productsInCart) {
+            let newTotalPrice = this.state.totalPrice + product.prices[localStorageData.activeCurrency].amount;
+            let newQuantity = this.state.quantity + 1;
+
+            this.setState({
+                productsInCart: newProducts,
+                totalPrice: newTotalPrice,
+                taxPrice: newTotalPrice * 21 / 100,
+                quantity: newQuantity,
+            });
 
             localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
-            ...localStorageData,
-                totalAmount: price,
-                productsInCart: [cartProduct],
-            }));
-        } else {
-            if(this.state.productsInCart?.every((product) => product.id !== cartProduct.id)) {
-                const newProducts = [...this.state.productsInCart, cartProduct];
+                ...localStorageData,
+                productsInCart: newProducts,
+                totalPrice: newTotalPrice,
+                
+            }))
+        }
 
-                this.setState({ productsInCart: newProducts });
-                const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
-
-                localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
-                    ...localStorageData,
-                    totalAmount: localStorageData.totalAmount + cartProduct.prices[localStorageData.activeCurrency].amount,
-                    productsInCart: newProducts,
-                }));
-            };
-        };
     };
 
-    handleAttributeChange(productId, attributeIndex, attributeName, attributeValue) {
-        let products = this.state.productsInCart;
-        products.find((product) => productId === product.id).selectedAttributes[attributeIndex][attributeName] = attributeValue;
+    handleAttributeChange(productId, previousAttributes, newAttributes) {
+        let newProducts = this.state.productsInCart;
 
-        this.setState({ productsInCart: products });
+        const productToMerge = newProducts.find((productInCart) => {
+            return productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(newAttributes);
+        });
+
+
+        if(productToMerge) {
+            newProducts = newProducts.map((productInCart) => {
+                if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(newAttributes)) {
+                    let productToChangeAmount = newProducts.find((product) => {
+                        if(product.id === productId && JSON.stringify(product.selectedAttributes) === JSON.stringify(previousAttributes)) {
+                            return product
+                        }
+                    });
+
+                    console.log('CHANGING AMOUNT');
+
+                    return {
+                        ...productInCart,
+                        amount: productInCart.amount + productToChangeAmount.amount,
+                    }
+                }
+                return productInCart;
+            }).filter((productInCart) => {
+                if(
+                    (productInCart.id !== productId) ||
+                    (productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) !== JSON.stringify(previousAttributes)) ||
+                    (productInCart.id === productId && (JSON.stringify(productInCart.selectedAttributes) !== JSON.stringify(previousAttributes) && JSON.stringify(productInCart.selectedAttributes) !== JSON.stringify(newAttributes)))
+                ) {
+                    return productInCart;
+                }
+            });
+        } else {
+            newProducts = newProducts.map((productInCart) => {
+                if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(previousAttributes)) {
+                    return {
+                        ...productInCart,
+                        selectedAttributes: newAttributes,
+                    }
+                }
+                return productInCart;
+            });
+        }
+
+        this.setState({ productsInCart: newProducts });
 
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
+        
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
-            productsInCart: products,
+            productsInCart: newProducts,
         }));
     };
 
-    decreaseProductAmount(productId) {
+    decreaseProductAmount(productId, selectedAttributes) {
+
         let newProducts = this.state.productsInCart;
-        const quantity = this.state.quantity;
+
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
-        
         const productPrice = newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
-        
-        if(newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].amount === 1) {
-            newProducts = newProducts.filter((product) => product.id !== productId);
-        } else {
-            newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].amount -= 1;
-        }
+
+
+        newProducts = newProducts.map((productInCart) => {
+            if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(selectedAttributes)) {
+                return {
+                    ...productInCart,
+                    amount: productInCart.amount - 1,
+                }
+            }
+            return productInCart;
+        }).filter((productInCart) => {
+            if(productInCart.amount > 0) return productInCart;
+        });
+
+        const newTotalPrice = localStorageData.totalPrice - productPrice;
 
         this.setState({
             productsInCart: newProducts,
-            taxPrice: (localStorageData.totalAmount - productPrice) * 21 / 100,
-            totalPrice: localStorageData.totalAmount - productPrice,
-            quantity: quantity - 1 !== 0 ? quantity - 1 : 0,
+            taxPrice: newTotalPrice * 21 / 100,
+            totalPrice: newTotalPrice,
+            quantity: this.state.quantity - 1
         });
 
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
-            totalAmount: localStorageData.totalAmount - productPrice,
+            totalPrice: newTotalPrice,
             productsInCart: newProducts,
         }));
     };
 
-    increaseProductAmount(productId) {
-        const newProducts = this.state.productsInCart;
+    increaseProductAmount(productId, selectedAttributes) {
+        let newProducts = this.state.productsInCart;
         const quantity = this.state.quantity;
+
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
         
         const productPrice =  newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
 
-        newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].amount += 1;
+        newProducts = newProducts.map((productInCart) => {
+            if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(selectedAttributes)) {
+                return {
+                    ...productInCart,
+                    amount: productInCart.amount + 1,
+                }
+            }
+            return productInCart;
+        });
+
+        const newTotalPrice = localStorageData.totalPrice + productPrice;
         
         this.setState({
             productsInCart: newProducts,
-            taxPrice: (localStorageData.totalAmount + productPrice) * 21 / 100,
-            totalPrice: localStorageData.totalAmount + productPrice,
+            taxPrice: newTotalPrice * 21 / 100,
+            totalPrice: newTotalPrice,
             quantity: quantity + 1,
         });
 
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
-            totalAmount: localStorageData.totalAmount + productPrice,
+            totalPrice: localStorageData.totalPrice + productPrice,
             productsInCart: newProducts,
         }));
     };
 
     componentDidUpdate(prevProps, prevState) {
         const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
-        if(localStorageData && JSON.parse(localStorageData).totalAmount) {
+        if(localStorageData && JSON.parse(localStorageData).totalPrice) {
             const parsedLocalStorageData = JSON.parse(localStorageData);
 
-            if(prevState.totalPrice !== parsedLocalStorageData.totalAmount) {
+            if(prevState.totalPrice !== parsedLocalStorageData.totalPrice) {
                 this.setState({
-                    taxPrice: parsedLocalStorageData.totalAmount * 21 / 100,
-                    totalPrice: parsedLocalStorageData.totalAmount,
+                    taxPrice: parsedLocalStorageData.totalPrice * 21 / 100,
+                    totalPrice: parsedLocalStorageData.totalPrice,
                 });
             };
         };
@@ -152,6 +225,7 @@ export class CartProvider extends Component {
 
     componentDidMount() {
         const localStorageData = localStorage.getItem(LOCAL_STORAGE_PREFIX);
+
         if(localStorageData) {
             const parsedLocalStorageData = JSON.parse(localStorageData);
            
@@ -161,9 +235,9 @@ export class CartProvider extends Component {
            
             this.setState({
                 productsInCart: parsedLocalStorageData.productsInCart ? parsedLocalStorageData.productsInCart : [],
-                taxPrice: parsedLocalStorageData.totalAmount ? parsedLocalStorageData.totalAmount * 21 / 100 : 0,
+                taxPrice: parsedLocalStorageData.totalPrice ? parsedLocalStorageData.totalPrice * 21 / 100 : 0,
                 quantity: quantity > 0 ? quantity : 0,
-                totalPrice: parsedLocalStorageData.totalAmount ? parsedLocalStorageData.totalAmount : 0,
+                totalPrice: parsedLocalStorageData.totalPrice ? parsedLocalStorageData.totalPrice : 0,
             });
         }
     };

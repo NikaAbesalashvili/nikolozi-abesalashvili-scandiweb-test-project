@@ -1,6 +1,6 @@
 import { Component, createRef } from "react";
 import { Link } from 'react-router-dom';
-import CartProduct from '../CartProduct/CartProduct';
+import MiniCartProduct from '../MiniCartProduct/MiniCartProduct';
 
 import './MiniCart.css';
 import { BsCart2 } from 'react-icons/bs';
@@ -66,17 +66,23 @@ export default class MiniCart extends Component {
                     <div className="mini-cart-box" >
                         <div className="mini-cart-products" ref={this.wrapperRef} >
 
-                            {quantity && (
+                            {quantity > 0 && (
                                 <h3 className="quantity-heading" >My Bag, <span>{quantity} items</span></h3>
                             )}
                         
-                            {productsInCart && productsInCart.map((productInCart) => (
-                                <CartProduct
-                                    variant='small'
-                                    product={productInCart}
-                                    key={productInCart.id}
-                                />
-                            ))}
+                            {productsInCart && (
+                                <div className="mini-cart-products-container">
+
+                                    {productsInCart.map((productInCart, index) => (
+                                        <MiniCartProduct
+                                            variant='small'
+                                            product={productInCart}
+                                            key={index}
+                                        />
+
+                                    ))}
+                                </div>
+                            )}
 
                             {totalPrice > 0 && (
                                 <div className="total-price-container" >

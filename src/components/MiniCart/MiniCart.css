@@ -84,6 +84,12 @@
     color: var(--white);
 }
 
+.mini-cart-products-container {
+    display: flex;
+    gap: 2rem;
+    flex-direction: column;
+}
+
 .total-price-container {
     margin-top: 2rem;
     display: flex;
@@ -94,6 +100,7 @@
 .text-span,
 .value-span {
     font-size: 1em;
+    color: var(--dark-grey);
 }
 
 .text-span {

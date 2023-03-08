@@ -38,9 +38,9 @@ export default class Cart extends Component {
                                 <h1 className="cart-title" >CART</h1>
                 
                                 <div className="products">
-                                    {productsInCart.length > 0 ? productsInCart.map((product) => (
+                                    {productsInCart.length > 0 ? productsInCart.map((product, index) => (
                                         product.amount > 0 && (
-                                            <CartProduct noBorders={false} product={product} key={product.id} />
+                                            <CartProduct noBorders={false} product={product} key={index} />
                                         )
                                     )) : (
                                         <h2 className="no-pruducts-in-cart" >NO PRODUCTS IN CART</h2>

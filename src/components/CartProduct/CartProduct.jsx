@@ -39,7 +39,7 @@ export default class CartProduct extends Component {
                                 } = cartProps;
 
                                 return (
-                                    <div className={`cart-product ${this.props.variant ? 'small' : ''}`}>
+                                    <div className='cart-product'>
 
                                     <div className="left-side">
                                         <h2 className="brand-name">{brand}</h2>
@@ -56,10 +56,10 @@ export default class CartProduct extends Component {
                                                             
                                                             {attribute.items.map((item) => (
                                                                 <span
-                                                                    className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${selectedAttributes[index][attribute.id] === item.displayValue ? attribute.id !== 'Color' ? 'selected' : 'selected-color' : ''}`}
+                                                                    className={`attribute-item ${attribute.id !== 'Color' ? 'not-color-item' : 'color'} ${selectedAttributes[attribute.id] === item.displayValue ? attribute.id !== 'Color' ? 'selected' : 'selected-color' : ''}`}
                                                                     key={item.id}
                                                                     style={{ backgroundColor: attribute.id !== 'Color' ? '': item.value}}
-                                                                    onClick={() => handleAttributeChange(id, index, attribute.id, item.displayValue)}
+                                                                    onClick={() => handleAttributeChange(id, selectedAttributes, { ...selectedAttributes, [attribute.id]: item.displayValue})}
                                                                 >
                                                                     {attribute.id !== 'Color' && item.value}
                                                                 </span>
@@ -77,9 +77,9 @@ export default class CartProduct extends Component {
                     
                                     <div className="right-side">
                                         <div className="amount-controller">
-                                            <span className="amount-span" onClick={() => increaseProductAmount(id)} >+</span>
+                                            <span className="amount-span" onClick={() => increaseProductAmount(id, selectedAttributes)} >+</span>
                                             <span className="amount-number">{amount}</span>
-                                            <span className="amount-span" onClick={() => decreaseProductAmount(id)} >-</span>
+                                            <span className="amount-span" onClick={() => decreaseProductAmount(id, selectedAttributes)} >-</span>
                                         </div>
                                         <img src={gallery[0]} alt={name} className="product-image" />
                                     </div>

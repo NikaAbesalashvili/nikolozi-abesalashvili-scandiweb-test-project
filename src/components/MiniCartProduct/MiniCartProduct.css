@@ -1,0 +1,109 @@
+.mini-cart-product {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mini-cart-product-description {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+.mini-cart-product-brand,
+.mini-cart-product-name {
+    font-weight: 300;
+    font-weight: 1em;
+    color: var(--dark-grey);
+}
+
+.mini-cart-product-price {
+    font-weight: 500;
+}
+
+.mini-cart-product-attributes {
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+}
+
+
+.mini-cart-product-attribute-name {
+    font-size: .875em;
+    font-weight: 400;
+    color: var(--dark-grey);
+}
+
+.mini-cart-product-attribute-items {
+    margin-top: .4rem;
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+}
+
+.mini-cart-product-attribute-item {
+    cursor: pointer;
+}
+
+.mini-cart-product-attribute-item:hover {
+    background-color: var(--dark-grey);
+    color: var(--white);
+}
+
+.mini-cart-product-not-color-attribute {
+    border: 1px solid var(--dark-grey);
+    padding: .3rem;
+    font-size: .875rem;
+    font-weight: 400;
+    color: var(--dark-grey);
+}
+
+.mini-cart-product-color-attribute {
+    aspect-ratio: 1 / 1;
+    width: .8rem;
+}
+
+.mini-cart-product-selected-attribute {
+    background-color: var(--dark-grey);
+    color: var(--white);
+}
+
+.mini-cart-product-selected-color-attribute {
+    border: 1px solid var(--dark-grey);
+}
+
+.amount-and-image {
+    display: flex;
+    gap: 1rem;
+    /* align-items: center; */
+}
+
+.mini-cart-product-amount-controller {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amount-controller-span {
+    padding: 0rem .6rem;
+    text-align: center;
+    font-size: 1.5em;
+    border: 1px solid var(--dark-grey);
+    cursor: pointer;
+}
+
+.product-amount {
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.mini-cart-product-image {
+    width: 200px;
+}
+
+.amount-controller-span:hover {
+    color: var(--white);
+    background-color: var(--dark-grey);
+}
+
