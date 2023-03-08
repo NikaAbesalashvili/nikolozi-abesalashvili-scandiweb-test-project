@@ -1,3 +1,3 @@
 export * from './removeDublicates';
 export * from './generateFilterUrl';
-export * from './filterProductsByAttributes';
+export * from './filterProducts';

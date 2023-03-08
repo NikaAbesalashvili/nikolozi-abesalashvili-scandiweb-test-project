@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { LOCAL_STORAGE_PREFIX } from '../constants';
 import { ProductsService } from '../services';
-import { removeDublicates, generateFilterUrl, filterProductsByAttributes } from '../utils';
+import { removeDublicates, generateFilterUrl, filterProducts } from '../utils';
 
 export const ProductsContext = React.createContext();
 export const ProductsConsumer = ProductsContext.Consumer;
@@ -37,7 +37,20 @@ export class ProductsProvider extends Component {
 			});
 	
 		const { categories } = apiCategories;
-		this.setState({ categories });
+
+		let selectedCategoryIndex = 0;
+		let pagePath = new URL(window.location.href).pathname;
+
+		if(pagePath !== '/') {
+			selectedCategoryIndex = categories.findIndex((category) => {
+				return category.name === pagePath.slice(1);
+			});
+		}
+
+		this.setState({
+			categories,
+			selectedCategoryIndex,
+		});
 	};
 
 	async fetchCurrencies() {
@@ -153,7 +166,7 @@ export class ProductsProvider extends Component {
 		this.setState({ selectedAttributes: newSelectedAttributes });
 		generateFilterUrl(newSelectedAttributes);
 
-		const newFilteredProducts = Object.keys(newSelectedAttributes).length > 0 ? filterProductsByAttributes(this.state.products, newSelectedAttributes) : this.state.products;
+		const newFilteredProducts = filterProducts(this.state.products, newSelectedAttributes, this.state.categories[this.state.selectedCategoryIndex].name);
 		this.setState({ filteredProducts: newFilteredProducts });
 	};
 
