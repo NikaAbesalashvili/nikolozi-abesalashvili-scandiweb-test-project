@@ -38,18 +38,8 @@ export class ProductsProvider extends Component {
 	
 		const { categories } = apiCategories;
 
-		let selectedCategoryIndex = 0;
-		let pagePath = new URL(window.location.href).pathname;
-
-		if(pagePath !== '/') {
-			selectedCategoryIndex = categories.findIndex((category) => {
-				return category.name === pagePath.slice(1);
-			});
-		}
-
 		this.setState({
 			categories,
-			selectedCategoryIndex,
 		});
 	};
 
@@ -80,11 +70,25 @@ export class ProductsProvider extends Component {
 			.catch((error) => {
 				console.log(error);
 			});
+
 		const { products } = apiProducts.category;
-		
+
+		let pageUrl = new URL(window.location.href);
+
+		let filters = pageUrl.href.includes('?') && pageUrl.href.split("?")[1].split('&').reduce((selectedFilters, filterElement) => {
+			let seperatedNameAndValue = filterElement.split('=')
+			return {
+				...selectedFilters,
+				[seperatedNameAndValue[0]]: seperatedNameAndValue[1],
+			}
+		}, {});
+
+		let category = pageUrl.pathname.slice(1)
+
 		this.setState({
 			products,
-			filteredProducts: products,
+			filteredProducts: filterProducts(products, filters, category),
+			selectedAttributes: filters ? filters : {}
 		});
 	};
 
