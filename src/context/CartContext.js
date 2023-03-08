@@ -144,8 +144,10 @@ export class CartProvider extends Component {
         let newProducts = this.state.productsInCart;
 
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
-        const productPrice = newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
 
+        const newTotalPrice = newProducts.reduce((newTotal, productInCart) => {
+            return newTotal + (productInCart.prices[localStorageData.activeCurrency].amount * productInCart.amount)
+        }, 0) - newProducts.find((product) => product.id === productId).prices[localStorageData.activeCurrency].amount;
 
         newProducts = newProducts.map((productInCart) => {
             if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(selectedAttributes)) {
@@ -158,8 +160,6 @@ export class CartProvider extends Component {
         }).filter((productInCart) => {
             if(productInCart.amount > 0) return productInCart;
         });
-
-        const newTotalPrice = localStorageData.totalPrice - productPrice;
 
         this.setState({
             productsInCart: newProducts,
@@ -180,9 +180,12 @@ export class CartProvider extends Component {
         const quantity = this.state.quantity;
 
         const localStorageData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_PREFIX));
-        
-        const productPrice =  newProducts[newProducts.indexOf(newProducts.find((product) => product.id === productId))].prices[localStorageData.activeCurrency].amount;
 
+        const newTotalPrice = newProducts.reduce((newTotal, productInCart) => {
+            return newTotal + (productInCart.prices[localStorageData.activeCurrency].amount * productInCart.amount)
+        }, 0) + newProducts.find((product) => product.id === productId).prices[localStorageData.activeCurrency].amount;
+
+        
         newProducts = newProducts.map((productInCart) => {
             if(productInCart.id === productId && JSON.stringify(productInCart.selectedAttributes) === JSON.stringify(selectedAttributes)) {
                 return {
@@ -193,8 +196,6 @@ export class CartProvider extends Component {
             return productInCart;
         });
 
-        const newTotalPrice = localStorageData.totalPrice + productPrice;
-        
         this.setState({
             productsInCart: newProducts,
             taxPrice: newTotalPrice * 21 / 100,
@@ -204,7 +205,7 @@ export class CartProvider extends Component {
 
         localStorage.setItem(LOCAL_STORAGE_PREFIX, JSON.stringify({
             ...localStorageData,
-            totalPrice: localStorageData.totalPrice + productPrice,
+            totalPrice: newTotalPrice,
             productsInCart: newProducts,
         }));
     };
